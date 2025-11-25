@@ -13,5 +13,6 @@
             <div>{{ $errors->first() }}</div>
         @endif
     </form>
+    <button onclick="location.href='register'">daftar</button>
 </body>
 </html>
