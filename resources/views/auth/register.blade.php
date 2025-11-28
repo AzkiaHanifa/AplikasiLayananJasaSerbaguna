@@ -105,9 +105,27 @@
         const field = document.getElementById(fieldId);
         const isPassword = field.type === "password";
 
+<<<<<<< HEAD
         field.type = isPassword ? "text" : "password";
         iconElement.textContent = isPassword ? "🙈" : "👁️";
     }
 </script>
 
 @endsection
+=======
+        <label>Alamat Email:</label><br>
+        <input type="email" name="email" value="{{ old('email') }}" required placeholder="contoh@email.com"><br><br>
+
+        <label>Password:</label><br>
+        <input type="password" name="password" required><br><br>
+
+        <label>Konfirmasi Password:</label><br>
+        <input type="password" name="password_confirmation" required><br><br>
+
+        <button type="submit">Daftar Sekarang</button>
+    </form>
+    
+    <p>Sudah punya akun? <a href="/login">Login disini</a></p>
+</body>
+</html>
+>>>>>>> 89413f0ec0e8fecbb19b3e06faaa9bb4001628df

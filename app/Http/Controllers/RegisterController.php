@@ -3,33 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
-    // Menampilkan form registrasi
     public function showRegistrationForm()
     {
         return view('auth.register');
     }
 
-    // Memproses registrasi
     public function register(Request $request)
     {
-        $validated = $request->validate([
-            'nama'     => 'required',
-            'password' => 'required|min:6|confirmed',
+        // 1. Validasi HANYA Email & Password
+        $request->validate([
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        // Membuat user baru
+        // 2. Create User (Name dikosongkan/null)
         $user = User::create([
-            'nama'     => $validated['nama'],
-            'password' => Hash::make($validated['password']),
+            'nama' => null, 
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'roles' => 'user', // Default role
         ]);
 
-  
-
-        return redirect('/login')->with('success', 'Registrasi berhasil');
+        // 3. Login & Redirect
+        Auth::login($user);
+        
+        // Arahkan ke home user
+        return redirect()->route('user.home');
     }
 }
