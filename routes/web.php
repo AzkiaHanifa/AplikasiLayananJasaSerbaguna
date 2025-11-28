@@ -8,7 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MitraController;
 use App\Http\Controllers\RegisterController;
 Route::get('/', function () {
-    return redirect('/login');
+    return view('index');
 });
 
 
