@@ -1,29 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Admin Dashboard</title>
-</head>
-<body>
+<!-- resources/views/admin/dashboard.blade.php -->
 
-<h1>Admin Dashboard</h1>
+<h1>Selamat Datang di Dashboard Admin</h1>
 
-<p>Halo, <strong>{{ auth()->user()->name }}</strong></p>
-<p>Role Anda: <strong>{{ auth()->user()->roles }}</strong></p>
+<div style="margin-top: 30px; border: 1px solid #ddd; padding: 20px;">
+    <h2>Menu Utama Job Management</h2>
+    <p>Akses cepat untuk mengelola lowongan pekerjaan.</p>
+    
+    <!-- Tombol menuju Job List Index -->
+    <a href="{{ route('admin.jobs.index') }}" 
+       style="display: inline-block; padding: 10px 15px; background-color: #3490dc; color: white; text-decoration: none; border-radius: 5px; margin-right: 15px;">
+        Lihat & Kelola Daftar Pekerjaan (Index)
+    </a>
 
-<p>Status Auth: 
-    @if(auth()->check())
-        <span style="color:green;">Authenticated ✔</span>
-    @else
-        <span style="color:red;">Not Authenticated ✘</span>
-    @endif
-</p>
+    <!-- Tombol menuju Form Tambah Job -->
+    <a href="{{ route('admin.jobs.create') }}" 
+       style="display: inline-block; padding: 10px 15px; background-color: #1c7430; color: white; text-decoration: none; border-radius: 5px;">
+        + Tambah Lowongan Baru (Create)
+    </a>
 
-<p>Anda berhasil masuk sebagai <strong>ADMIN</strong>.</p>
+</div>
 
-<form action="{{ route('logout') }}" method="POST">
-    @csrf
-    <button type="submit">Logout</button>
-</form>
-
-</body>
-</html>
+<div style="margin-top: 30px; border: 1px solid #ddd; padding: 20px;">
+    <h2>Menu Lain</h2>
+    <ul>
+        <li><a href="#">Kelola Kategori (Belum dibuat)</a></li>
+        <li><a href="#">Lihat Pengguna Terdaftar (Belum dibuat)</a></li>
+    </ul>
+</div>
