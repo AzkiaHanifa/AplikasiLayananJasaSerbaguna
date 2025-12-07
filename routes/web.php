@@ -16,7 +16,7 @@ use App\Http\Controllers\RegisterController;
 
 // Redirect root ke halaman login
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('index');
 });
 
 // Register
