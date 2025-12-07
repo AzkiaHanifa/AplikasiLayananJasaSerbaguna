@@ -6,7 +6,7 @@
 <body>
     <form method="POST" action="{{ url('/login') }}">
         @csrf
-        <input type="nama" name="nama" placeholder="Nama" required autofocus>
+        <input type="email" name="email" placeholder="Email" required autofocus>
         <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Login</button>
         @if($errors->any())
