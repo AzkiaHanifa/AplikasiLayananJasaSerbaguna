@@ -49,10 +49,10 @@
                 <div class="mb-2">
                     <input 
                         type="text" 
-                        name="nama" 
+                        name="email" 
                         class="form-control" 
                         placeholder="Email"
-                        value="{{ old('nama') }}"
+                        value="{{ old('email') }}"
                         required
                     >
                 </div>
@@ -105,35 +105,9 @@
         const field = document.getElementById(fieldId);
         const isPassword = field.type === "password";
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> d22c94f0979626b6458d1bb86783c0db75cc4967
         field.type = isPassword ? "text" : "password";
         iconElement.textContent = isPassword ? "🙈" : "👁️";
     }
 </script>
-<<<<<<< HEAD
 
 @endsection
-=======
-        <label>Alamat Email:</label><br>
-        <input type="email" name="email" value="{{ old('email') }}" required placeholder="contoh@email.com"><br><br>
-
-        <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
-
-        <label>Konfirmasi Password:</label><br>
-        <input type="password" name="password_confirmation" required><br><br>
-
-        <button type="submit">Daftar Sekarang</button>
-    </form>
-    
-    <p>Sudah punya akun? <a href="/login">Login disini</a></p>
-</body>
-</html>
->>>>>>> 89413f0ec0e8fecbb19b3e06faaa9bb4001628df
-=======
-
-@endsection
->>>>>>> d22c94f0979626b6458d1bb86783c0db75cc4967

@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>List Lowongan Pekerjaan</title>
-</head>
-<body>
+@extends('layouts.admin.admin')
+
+@section('content')
     <h1>Dashboard Admin - List Lowongan Pekerjaan</h1>
 
     @if(session('success'))
@@ -86,6 +82,4 @@
     <div>
         {{ $jobs->links() }}
     </div>
-
-</body>
-</html>
+@endsection

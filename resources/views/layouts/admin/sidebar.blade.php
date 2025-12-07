@@ -13,6 +13,10 @@
                         href="/admin/transaksi" aria-expanded="false"><i class="fa-solid fa-car me-2"></i><span
                             class="hide-menu">Transaksi</span></a></li>
                 <li class="sidebar-item"> <a
+                        class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('admin/jobs') ? 'bg-primary' : '' }}"
+                        href="/admin/jobs" aria-expanded="false"><i class="fa-solid fa-car me-2"></i><span
+                            class="hide-menu">Pekerjaan</span></a></li>
+                <li class="sidebar-item"> <a
                         class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('admin/mitra') ? 'bg-primary' : '' }}"
                         href="/admin/mitra" aria-expanded="false"><i class="fa-solid fa-receipt me-2"></i><span
                             class="hide-menu">Mitra / Jasa</span></a></li>

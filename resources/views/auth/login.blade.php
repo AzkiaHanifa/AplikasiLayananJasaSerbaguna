@@ -40,10 +40,10 @@
                 <div class="mb-2">
                     <input 
                         type="text" 
-                        name="nama" 
+                        name="email" 
                         class="form-control" 
                         placeholder="Email" 
-                        required autofocus
+                        required austofocus
                     >
                 </div>
 
