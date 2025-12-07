@@ -106,10 +106,14 @@
         const isPassword = field.type === "password";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d22c94f0979626b6458d1bb86783c0db75cc4967
         field.type = isPassword ? "text" : "password";
         iconElement.textContent = isPassword ? "🙈" : "👁️";
     }
 </script>
+<<<<<<< HEAD
 
 @endsection
 =======
@@ -129,3 +133,7 @@
 </body>
 </html>
 >>>>>>> 89413f0ec0e8fecbb19b3e06faaa9bb4001628df
+=======
+
+@endsection
+>>>>>>> d22c94f0979626b6458d1bb86783c0db75cc4967
