@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\JobController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
@@ -39,6 +41,8 @@ Route::middleware(['auth', 'roles:admin'])
     ->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
         Route::resource('jobs', JobController::class);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('users', UserManagementController::class);
 });
 
 // USER

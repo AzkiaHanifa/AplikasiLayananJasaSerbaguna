@@ -21,12 +21,12 @@
                         href="/admin/mitra" aria-expanded="false"><i class="fa-solid fa-receipt me-2"></i><span
                             class="hide-menu">Mitra / Jasa</span></a></li>
                 <li class="sidebar-item"> <a
-                        class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('admin/kategori-jasa') ? 'bg-primary' : '' }}"
-                        href="/admin/kategori-jasa" aria-expanded="false"><i class="fa-solid fa-address-card me-2"></i><span
+                        class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('admin/categories') ? 'bg-primary' : '' }}"
+                        href="/admin/categories" aria-expanded="false"><i class="fa-solid fa-address-card me-2"></i><span
                             class="hide-menu">Kategori Jasa</span></a></li>
                 <li class="sidebar-item"> <a
-                        class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('admin/user') ? 'bg-primary' : '' }}"
-                        href="/admin/user" aria-expanded="false"><i class="fa-solid fa-user me-2"></i><span
+                        class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('admin/users') ? 'bg-primary' : '' }}"
+                        href="/admin/users" aria-expanded="false"><i class="fa-solid fa-user me-2"></i><span
                             class="hide-menu">User</span></a></li>
                 {{-- <li class="text-center p-40 upgrade-btn">
                     <a href="https://www.wrappixel.com/templates/flexy-bootstrap-admin-template/"
