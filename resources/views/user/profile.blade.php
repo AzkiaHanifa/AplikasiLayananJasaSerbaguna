@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-9">
 
-            {{-- ALERT NOTIFIKASI HTML (Backup) --}}
+            {{-- ALERT NOTIFIKASI HTML (Backup jika JS gagal) --}}
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
@@ -13,7 +13,7 @@
                 </div>
             @endif
 
-            {{-- ================= KARTU PROFIL ================= --}}
+            {{-- ================= 1. KARTU PROFIL ================= --}}
             <div class="card shadow border-0 overflow-hidden mb-4">
                 <div class="card-header bg-primary text-white p-4 text-center">
                     <h4 class="mb-0">Profil Saya</h4>
@@ -78,54 +78,56 @@
             {{-- ================= AKHIR KARTU PROFIL ================= --}}
 
 
-            {{-- ================= AREA MENU TAMBAHAN ================= --}}
+            {{-- ================= 2. AREA MENU TAMBAHAN (DINAMIS) ================= --}}
+            {{-- 
+                Logika: 
+                - Jika belum daftar mitra ($mitra == null) -> Tampilkan Tombol Daftar.
+                - Jika sudah daftar -> Tampilkan Status & Tombol Kelola Jasa.
+            --}}
             
-            {{-- 1. BAGIAN DAFTAR JADI MITRA (Hanya muncul jika user BUKAN mitra/penjasa) --}}
-            @if($user->roles != 'penjasa' && $user->roles != 'mitra') 
-                <div class="card shadow border-0 overflow-hidden bg-white mb-3">
-                    <div class="card-body p-4">
-                        <div class="row align-items-center">
-                            <div class="col-md-8">
-                                <h5 class="fw-bold text-primary mb-2">
-                                    <i class="bi bi-briefcase-fill me-2"></i> Ingin Menjadi Mitra Penjasa?
-                                </h5>
-                                <p class="text-muted mb-0">
-                                    Bergabunglah bersama kami dan tawarkan jasa Anda.
-                                </p>
-                            </div>
-                            <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                                <a href="{{ route('user.mitra.register') }}" class="btn btn-primary px-4 py-2 shadow-sm rounded-pill">
-                                    Daftar Sekarang <i class="bi bi-arrow-right ms-2"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
-            {{-- 2. BAGIAN DAFTAR PEKERJAAN (SUDAH DIEDIT AGAR SAMA) --}}
-            <div class="card shadow border-0 overflow-hidden bg-white mt-3">
+            <div class="card shadow border-0 overflow-hidden bg-white mb-3">
                 <div class="card-body p-4">
                     <div class="row align-items-center">
                         <div class="col-md-8">
-                            {{-- Judul menggunakan text-primary agar biru sama --}}
+                            {{-- LOGIKA JUDUL --}}
                             <h5 class="fw-bold text-primary mb-2">
-                                <i class="bi bi-clipboard-data me-2"></i> Daftar Pekerjaan 
+                                <i class="bi bi-briefcase-fill me-2"></i> 
+                                {{ $mitra ? 'Kelola Jasa & Layanan' : 'Ingin Menjadi Mitra Penjasa?' }}
                             </h5>
+                            
+                            {{-- LOGIKA DESKRIPSI & STATUS --}}
                             <p class="text-muted mb-0">
-                                
+                                @if(!$mitra)
+                                    Bergabunglah bersama kami dan tawarkan jasa Anda.
+                                @else
+                                    @if($mitra->status == 'pending')
+                                        <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Status Mitra: Menunggu Verifikasi</span>
+                                    @elseif($mitra->status == 'rejected')
+                                        <span class="badge bg-danger"><i class="bi bi-x-circle"></i> Status Mitra: Ditolak</span>
+                                    @else
+                                        <span class="badge bg-success"><i class="bi bi-check-circle"></i> Status Mitra: Aktif</span>
+                                        <br>Kelola penawaran jasa Anda di sini.
+                                    @endif
+                                @endif
                             </p>
                         </div>
+
                         <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                            {{-- 
-                                PERUBAHAN TOMBOL:
-                                Menggunakan class 'btn-primary' (biru solid) dan ikon 'bi-arrow-right'
-                                agar sama persis dengan tombol daftar mitra di atas.
-                                Href masih '#' menunggu CRUD Anda.
-                            --}}
-                            <a href="{{ route('user.jobs.create') }}" class="btn btn-primary px-4 py-2 shadow-sm rounded-pill">
-                                Daftar<i class="bi bi-arrow-right ms-2"></i>
-                            </a>
+                            
+                            @if(!$mitra)
+                                {{-- KONDISI 1: BELUM DAFTAR MITRA --}}
+                                <a href="{{ route('user.mitra.register') }}" class="btn btn-primary px-4 py-2 shadow-sm rounded-pill">
+                                    Daftar Sekarang <i class="bi bi-arrow-right ms-2"></i>
+                                </a>
+
+                            @else
+                                {{-- KONDISI 2: SUDAH ADA DATA MITRA (Cek Status via JS onclick) --}}
+                                <button onclick="checkMitraAccess('{{ $mitra->status }}', '{{ route('user.jobs.manage') }}')" 
+                                        class="btn btn-success px-4 py-2 shadow-sm rounded-pill">
+                                    <i class="bi bi-gear-fill me-2"></i> Kelola Jasa
+                                </button>
+                            @endif
+
                         </div>
                     </div>
                 </div>
@@ -139,11 +141,34 @@
 
 {{-- 
     =======================================================
-    SCRIPT SWEETALERT
+    SCRIPT (SWEETALERT & LOGIC AKSES)
     =======================================================
 --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    // FUNGSI 1: CEK STATUS AKSES MITRA
+    function checkMitraAccess(status, url) {
+        if (status === 'pending') {
+            Swal.fire({
+                icon: 'info',
+                title: 'Sedang Ditinjau',
+                text: 'Pendaftaran Mitra Anda sedang diverifikasi oleh Admin. Mohon tunggu persetujuan sebelum mengelola jasa.',
+                confirmButtonColor: '#3085d6',
+            });
+        } else if (status === 'rejected') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Pendaftaran Ditolak',
+                text: 'Maaf, pengajuan Mitra Anda ditolak. Silakan hubungi admin untuk info lebih lanjut.',
+                confirmButtonColor: '#d33',
+            });
+        } else if (status === 'approved') {
+            // Jika Approved, baru pindah halaman
+            window.location.href = url;
+        }
+    }
+
+    // FUNGSI 2: MENANGKAP SESSION FLASHDATA
     document.addEventListener("DOMContentLoaded", function() {
         
         @if(session('error'))

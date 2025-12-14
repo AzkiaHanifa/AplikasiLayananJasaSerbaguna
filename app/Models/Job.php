@@ -10,6 +10,7 @@ class Job extends Model
         'user_id',
         'title', 
         'company',
+        'job_image',
         'description',
         'type',
         'location',
