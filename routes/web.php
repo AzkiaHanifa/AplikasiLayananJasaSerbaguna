@@ -4,10 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\Admin\VerifMitraController;
+use App\Http\Controllers\User\UserJobController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\MitraController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\MitraController;
 use App\Http\Controllers\RegisterController;
 
 /*
@@ -43,6 +45,14 @@ Route::middleware(['auth', 'roles:admin'])
         Route::resource('jobs', JobController::class);
         Route::resource('categories', CategoryController::class);
         Route::resource('users', UserManagementController::class);
+        // Halaman List
+    Route::get('/mitra/verifikasi', [VerifMitraController::class, 'index'])->name('mitra.index');
+    
+    // Action Approve
+    Route::patch('/mitra/{id}/approve', [VerifMitraController::class, 'approve'])->name('mitra.approve');
+    
+    // Action Reject
+    Route::patch('/mitra/{id}/reject', [VerifMitraController::class, 'reject'])->name('mitra.reject');
 });
 
 // USER
@@ -61,6 +71,14 @@ Route::middleware(['auth', 'roles:user'])
         // 3. Edit & Update
         Route::get('/profile/edit', [UserController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [UserController::class, 'update'])->name('profile.update');
+
+        // 4. Mitra Registration
+        Route::get('/register-mitra', [MitraController::class, 'create'])->name('mitra.register');
+        Route::post('/register-mitra', [MitraController::class, 'store'])->name('mitra.store');
+        Route::get('/jobs/create', [UserJobController::class, 'create'])->name('jobs.create');
+    
+    // 2. Memproses Simpan Data (Store)
+    Route::post('/jobs', [UserJobController::class, 'store'])->name('jobs.store');
 });
 
 // MITRA

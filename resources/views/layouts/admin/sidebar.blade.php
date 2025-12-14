@@ -17,9 +17,9 @@
                         href="/admin/jobs" aria-expanded="false"><i class="fa-solid fa-car me-2"></i><span
                             class="hide-menu">Pekerjaan</span></a></li>
                 <li class="sidebar-item"> <a
-                        class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('admin/mitra') ? 'bg-primary' : '' }}"
-                        href="/admin/mitra" aria-expanded="false"><i class="fa-solid fa-receipt me-2"></i><span
-                            class="hide-menu">Mitra / Jasa</span></a></li>
+                        class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('admin/mitra/verifikasi') ? 'bg-primary' : '' }}"
+                        href="/admin/mitra/verifikasi" aria-expanded="false"><i class="fa-solid fa-receipt me-2"></i><span
+                            class="hide-menu">Verifikasi Data</span></a></li>
                 <li class="sidebar-item"> <a
                         class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('admin/categories') ? 'bg-primary' : '' }}"
                         href="/admin/categories" aria-expanded="false"><i class="fa-solid fa-address-card me-2"></i><span
