@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LandingController;
 
 // Controller ADMIN
 use App\Http\Controllers\Admin\JobController; // Controller untuk Admin
@@ -23,9 +24,12 @@ use App\Http\Controllers\User\UserJobController; // Controller untuk User
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('index');
-});
+});*/
+
+Route::get('/', [LandingController::class, 'index'])->name('home.landing');
+Route::get('/jasa/{id}', [LandingController::class, 'show'])->name('job.show');
 
 // Auth
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');

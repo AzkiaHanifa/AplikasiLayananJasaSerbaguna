@@ -6,36 +6,33 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
             
-            // --- Kolom yang dibutuhkan untuk Job ---
+            // Relasi ke users (user_id) dengan Cascade Delete
+            $table->foreignId('user_id')
+                  ->constrained('users')
+                  ->onDelete('cascade');
+            
             $table->string('title');
             $table->string('company');
+            $table->string('job_image')->nullable();
             $table->text('description')->nullable();
             $table->string('type')->default('Full Time');
             $table->string('location');
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_active')->default(true); // tinyint(1) di MySQL = boolean
             
-            // --- Foreign Key ke Categories ---
-            // Karena tabel 'categories' dibuat di migrasi sebelumnya, 
-            // kita bisa langsung menggunakan foreignId di sini.
-            $table->foreignId('category_id') 
-                  ->constrained('categories') // Menghubungkan ke tabel 'categories'
-                  ->onDelete('cascade');     // Jika kategori dihapus, job juga ikut terhapus
-            
+            // Relasi ke categories (category_id) dengan Cascade Delete
+            $table->foreignId('category_id')
+                  ->constrained('categories')
+                  ->onDelete('cascade');
+                  
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('jobs');
