@@ -1,6 +1,7 @@
 @extends('layouts.user.main')
 
 @section('content')
+<br><br><br><br><br><br>
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-9">
@@ -84,7 +85,32 @@
                 - Jika belum daftar mitra ($mitra == null) -> Tampilkan Tombol Daftar.
                 - Jika sudah daftar -> Tampilkan Status & Tombol Kelola Jasa.
             --}}
-            
+            @if ($mitra)
+                <div class="card shadow border-0 overflow-hidden bg-white mb-3">
+                    <div class="card-body p-4">
+                        <h5>Aktif/Non Aktif Jasa</h5>
+                        <small class="">Aktifkan status jasa anda jika jasa anda tersedia.</small><br>
+                        <form action="/user/jobs/{{ $job->id }}/toggle-status"
+                            method="POST"
+                            class="d-inline "
+                            onsubmit="return confirm('Ubah status jasa ini?')">
+                            @csrf
+                            
+                            @if($job->is_job == 'tersedia')
+                            <input type="hidden" name="status" value="tidak tersedia">
+                            <button class="btn btn-success btn-lg rounded-pill mt-2">
+                                <i class="fa fa-check-circle me-1"></i> Aktif
+                            </button>
+                            @else
+                            <input type="hidden" name="status" value="tersedia">
+                            <button class="btn btn-outline-secondary btn-lg rounded-pill mt-2">
+                                <i class="fa fa-times-circle me-1"></i> Non Aktif
+                            </button>
+                            @endif
+                        </form>
+                    </div>
+                </div>
+            @endif
             <div class="card shadow border-0 overflow-hidden bg-white mb-3">
                 <div class="card-body p-4">
                     <div class="row align-items-center">
@@ -130,10 +156,23 @@
 
                         </div>
                     </div>
+
+                    
+                  
                 </div>
             </div>
             
             {{-- ================= AKHIR AREA MENU TAMBAHAN ================= --}}
+            <a href="{{ route('logout') }}" 
+                class="btn btn-danger px-4"
+                onclick="event.preventDefault(); document.getElementById('logout-form-dashboard').submit();">
+                Logout
+            </a>
+
+            {{-- Form Hidden (Wajib ada untuk proses Logout Laravel) --}}
+            <form id="logout-form-dashboard" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
 
         </div>
     </div>

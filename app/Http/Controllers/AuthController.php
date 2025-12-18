@@ -29,10 +29,10 @@ class AuthController extends Controller
                     return redirect('/admin/dashboard');
 
                 case 'user':
-                    return redirect('/user/home');
+                    return redirect('/');
 
                 case 'mitra':
-                    return redirect('/mitra/home');
+                    return redirect('/');
 
                 default:
                     Auth::logout();

@@ -179,4 +179,17 @@ class UserJobController extends Controller
 
         return redirect()->route('user.profile')->with('success', 'Data Jasa berhasil diperbarui!');
     }
+
+    public function toggleStatus($id, Request $request)
+    {
+        $job = Job::findOrFail($id);
+        $job->is_job = $request->status;
+        $job->save();
+
+        return redirect('/user/profile')->with(
+            'success',
+            'Status jasa berhasil diubah'
+        );
+    }
+
 }

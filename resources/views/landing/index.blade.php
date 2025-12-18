@@ -140,23 +140,25 @@
                                                 {{ $job->category->name }}
                                             </div>
                                             
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>{{ $job->title }}</h4>
-                                                <p>{{ Str::limit($job->description, 50) }}</p>
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">{{ $job->location }}</p>
-                                                    
-                                                    @auth
-                                                        <a href="{{ route('job.show', $job->id) }}" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                            <i class="fa fa-shopping-bag me-2 text-primary"></i> Order
-                                                        </a>
-                                                    @else
-                                                        <a href="{{ route('login') }}" onclick="return confirm('Silahkan login terlebih dahulu untuk memesan jasa ini.')" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                            <i class="fa fa-lock me-2 text-primary"></i> Login
-                                                        </a>
-                                                    @endauth
+                                            <a href="{{ route('job.show', $job->id) }}">
+                                                <div class="p-3 border border-secondary border-top-0 rounded-bottom text-start">
+                                                    <span class="badge mb-2 rounded-pill 
+                                                        @if($job->is_job == 'tersedia') bg-success
+                                                        @else bg-danger
+                                                        @endif">
+                                                        {{ ucfirst(str_replace('_',' ', $job->is_job)) }}
+                                                    </span>        
+                                                    <h5>{{ $job->title }}</h5>
+                                                    <p class="text-dark">{{ Str::limit($job->description, 50) }}</p>
+                                                    <div class="d-flex justify-content-between flex-lg-wrap">
+                                                        <p class="text-dark fs-5 fw-bold mb-0"><i class="bi bi-geo-alt-fill"></i> {{ $job->location }}</p>
+                                                        
+                                                            <a href="{{ route('job.show', $job->id) }}" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                                <i class="fa fa-shopping-bag me-2 text-primary"></i> Order
+                                                            </a>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </a>
                                         </div>
                                     </div>
                                     @endforeach

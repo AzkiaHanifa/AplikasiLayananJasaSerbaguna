@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Mitra; // <--- PENTING: Wajib ada agar tidak error "Class 'App\Models\Mitra' not found"
+use App\Models\TransaksiJasa;
+use App\Models\Job;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -24,9 +28,10 @@ class UserController extends Controller
         // --- BAGIAN INI YANG MEMPERBAIKI ERROR "Undefined variable $mitra" ---
         // Kita cari data mitra milik user yang sedang login
         $mitra = Mitra::where('user_id', $user->id)->first();
+        $job = Job::where('user_id', $user->id)->first();
 
         // Kita kirimkan variabel $user DAN $mitra ke view
-        return view('user.profile', compact('user', 'mitra'));
+        return view('user.profile', compact('user', 'mitra', 'job'));
     }
 
     public function edit()
@@ -67,4 +72,53 @@ class UserController extends Controller
 
         return redirect()->route('user.profile')->with('success', 'Profil berhasil dilengkapi!');
     }
+
+    public function transaksi()
+    {
+        $transaksi = TransaksiJasa::with('job')
+            ->where('user_id', auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('user.transaksi.index', compact('transaksi'));
+    }
+
+
+    public function orderJasa(Request $request)
+    {
+        $request->validate([
+            'alamat_tujuan' => 'required|string'
+        ]);
+
+        $transaksi = TransaksiJasa::create([
+            'job_id' => $request->job_id,
+            'user_id' => auth()->id(),
+            'kode_transaksi' => 'TRX-' . strtoupper(Str::random(8)),
+            'tanggal_transaksi' => Carbon::now(),
+            'status' => 'pending',
+            'alamat_tujuan' => $request->alamat_tujuan
+        ]);
+
+        return redirect('/user/transaksi')
+            ->with('success', 'Transaksi berhasil dibuat');
+    }
+
+    public function batalOrderJasa($id)
+    {
+        $transaksi = TransaksiJasa::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        if (in_array($transaksi->status, ['selesai', 'dibatalkan'])) {
+            return back()->with('error', 'Pesanan tidak dapat dibatalkan');
+        }
+
+        $transaksi->update([
+            'status' => 'dibatalkan'
+        ]);
+
+        return back()->with('success', 'Pesanan berhasil dibatalkan');
+    }
+
+
 }

@@ -15,7 +15,7 @@
         <div class="row g-4 mb-5">
             <div class="col-lg-8 col-xl-9">
                 <div class="row g-4">
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="border rounded">
                             <a href="#">
                                 @if($job->job_image)
@@ -28,19 +28,28 @@
                     </div>
 
                     <div class="col-lg-6">
+                        <span class="badge mb-2 rounded-pill 
+                            @if($job->is_job == 'tersedia') bg-success
+                            @else bg-danger
+                            @endif">
+                            {{ ucfirst(str_replace('_',' ', $job->is_job)) }}
+                        </span>  
                         <h4 class="fw-bold mb-3">{{ $job->title }}</h4>
                         
                         <p class="mb-3">Kategori: <span class="badge bg-secondary">{{ $job->category->name }}</span></p>
                         
-                        <h5 class="fw-bold mb-3">Lokasi: {{ $job->location }}</h5>
+                        <h5 class="fw-bold mb-3"><i class="bi bi-geo-alt-fill"></i> Lokasi: {{ $job->location }}</h5>
                         
                         <p class="mb-4">{{ $job->description }}</p>
 
-                        <div class="input-group quantity mb-5" style="width: 100px;">
+                        <div class="input-group quantity " style="width: 100px;">
                             </div>
 
                         @auth
-                            <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary">
+                            <a href="#" 
+                                class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#orderJasaModal">
                                 <i class="fa fa-shopping-bag me-2 text-primary"></i> Order Jasa Ini
                             </a>
                         @else
@@ -99,4 +108,44 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="orderJasaModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <form action="{{ route('user.order.jasa') }}" method="POST">
+                @csrf
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Order Jasa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    {{-- JOB ID --}}
+                    <input type="hidden" name="job_id" value="{{ $job->id }}">
+
+                    {{-- ALAMAT TUJUAN --}}
+                    <div class="mb-3">
+                        <label class="form-label">Alamat Tujuan</label>
+                        <textarea name="alamat_tujuan" class="form-control" rows="3" required>{{ Auth::user()->alamat }}
+                        </textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Batal
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Order Sekarang
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
 @endsection

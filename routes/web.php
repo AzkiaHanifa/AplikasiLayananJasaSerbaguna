@@ -18,6 +18,13 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\MitraController;
 use App\Http\Controllers\User\UserJobController; // Controller untuk User
 
+// 'pending',
+// 'diterima',
+// 'diperjalanan',
+// 'berlansung',
+// 'selesai',
+// 'dibatalkan'
+
 /*
 |--------------------------------------------------------------------------
 | Public Routes
@@ -86,11 +93,21 @@ Route::middleware(['auth', 'roles:user'])
         // Route Gatekeeper (Cek Create atau Edit)
         // URL: /user/jobs/manage | Name: user.jobs.manage
         Route::get('/jobs/manage', [UserJobController::class, 'manage'])->name('jobs.manage');
-
+        
         // Route Resource CRUD (Create, Store, Edit, Update, Destroy)
         // Menggunakan UserJobController, BUKAN JobController (Admin)
         // URL: /user/jobs... | Name: user.jobs.create, user.jobs.store, dll
         Route::resource('jobs', UserJobController::class);
+        
+        Route::get('/transaksi', [UserController::class, 'transaksi']);
+        Route::post('/order-jasa', [UserController::class, 'orderJasa'])
+        ->name('order.jasa');
+        Route::post('/transaksi/batalkan/{id}', [UserController::class, 'batalOrderJasa']);
+        Route::post('/jobs/{id}/toggle-status',
+            [UserJobController::class, 'toggleStatus']
+        );
+
+
 });
 
 // ================= MITRA =================
