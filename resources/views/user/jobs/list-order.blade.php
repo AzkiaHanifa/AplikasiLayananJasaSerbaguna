@@ -5,7 +5,7 @@
 <div class="container py-5">
 
     <div class="d-flex justify-content-between align-items-center mb-2">
-        <h4 class="fw-bold">📄 Riwayat Transaksi</h4>
+        <h4 class="fw-bold">Orderan Saya</h4>
     </div>
 
     @if(session('success'))
@@ -68,23 +68,35 @@
 
                 </div>
                 @if ($item->status == 'pending')
-                    <form action="{{ url('/user/transaksi/batalkan/' . $item->id) }}" 
+                <div class="d-flex">
+                    <form action="{{ url('/user/transaksi/ditolak/' . $item->id) }}" 
                         method="POST"
-                        onsubmit="return confirm('Apakah anda yakin ingin membatalkan pesanan ini?')">
+                        onsubmit="return confirm('Apakah anda yakin ingin tolak pesanan ini?')">
                         
                         @csrf
                         
-                        <button type="submit" class="mt-2 btn btn-outline-danger rounded-pill">
-                            Batalkan Pesanan
+                        <button type="submit" class="mt-2 btn btn-outline-danger me-2">
+                            Tolak
                         </button>
                     </form>
+                    <form action="{{ url('/user/transaksi/diterima/' . $item->id) }}" 
+                        method="POST"
+                        onsubmit="return confirm('Apakah anda yakin ingin terima pesanan ini?')">
+                        
+                        @csrf
+                        
+                        <button type="submit" class="mt-2 btn btn-success">
+                            Terima
+                        </button>
+                    </form>
+                </div>
                 @endif
               
             </div>
         </div>
     @empty
         <div class="text-center py-5">
-            <img src="https://jjjcdn-icons-png.flaticon.com/512/4076/4076549.png" width="120" class="mb-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png" width="120" class="mb-3">
             <h6 class="text-muted">Belum ada transaksi</h6>
         </div>
     @endforelse

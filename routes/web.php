@@ -98,6 +98,9 @@ Route::middleware(['auth', 'roles:user'])
         // Menggunakan UserJobController, BUKAN JobController (Admin)
         // URL: /user/jobs... | Name: user.jobs.create, user.jobs.store, dll
         Route::resource('jobs', UserJobController::class);
+        Route::get('/list-order', [UserJobController::class, 'listOrder']);
+        Route::post('/transaksi/ditolak/{id}', [UserJobController::class, 'tolakTransaksi']);
+        Route::post('/transaksi/diterima/{id}', [UserJobController::class, 'terimaTransaksi']);
         
         Route::get('/transaksi', [UserController::class, 'transaksi']);
         Route::post('/order-jasa', [UserController::class, 'orderJasa'])

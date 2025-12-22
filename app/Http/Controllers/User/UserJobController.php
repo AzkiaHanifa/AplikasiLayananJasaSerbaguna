@@ -7,6 +7,7 @@ use App\Models\Job;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\TransaksiJasa;
 use Illuminate\Support\Facades\Storage; // Penting untuk hapus/upload foto
 
 class UserJobController extends Controller
@@ -16,6 +17,14 @@ class UserJobController extends Controller
      * Method ini dipanggil saat tombol "Kelola Jasa" diklik.
      * Logika: Jika sudah punya jasa -> Edit. Jika belum -> Create.
      */
+    public function listOrder()
+    {
+        $userId = Auth::id();
+        // Cek apakah user ini SUDAH punya jasa
+        $transaksi = TransaksiJasa::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
+        return view('user.jobs.list-order', compact('transaksi'));
+    }
+
     public function manage()
     {
         $userId = Auth::id();
@@ -190,6 +199,32 @@ class UserJobController extends Controller
             'success',
             'Status jasa berhasil diubah'
         );
+    }
+
+    public function tolakTransaksi($id)
+    {
+        $transaksi = TransaksiJasa::findOrFail($id);
+        if (in_array($transaksi->status, ['selesai', 'ditolak'])) {
+            return back()->with('error', 'Pesanan tidak dapat ditolak');
+        };
+        $transaksi->status = 'ditolak';
+        $transaksi->save();
+        
+        return back()->with('success', 'Pesanan berhasil ditolak');
+    }
+    
+    public function terimaTransaksi($id)
+    {
+        
+        
+        $transaksi = TransaksiJasa::findOrFail($id);
+        if (in_array($transaksi->status, ['selesai', 'diterima'])) {
+            return back()->with('error', 'Pesanan tidak dapat diterima');
+        }
+        $transaksi->status = 'diterima';
+        $transaksi->save();
+
+        return back()->with('success', 'Pesanan berhasil diterima');
     }
 
 }
