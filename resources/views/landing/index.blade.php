@@ -94,12 +94,12 @@
     <div class="container-fluid fruite py-5">
         <div class="container py-5">
             <div class="tab-class text-center">
-                <div class="row g-4">
+                <div class="row g-4 mb-3">
                     <div class="col-lg-4 text-start">
-                        <h1>Jasa Tersedia</h1>
+                        <h1>Jasa Untuk Kamu</h1>
                     </div>
                     <div class="col-lg-8 text-end">
-                        <ul class="nav nav-pills d-inline-flex text-center mb-5">
+                        {{-- <ul class="nav nav-pills d-inline-flex text-center mb-5">
                             <li class="nav-item">
                                 <a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill" href="#tab-all">
                                     <span class="text-dark" style="width: 130px;">Semua</span>
@@ -113,7 +113,7 @@
                                 </a>
                             </li>
                             @endforeach
-                        </ul>
+                        </ul> --}}
                     </div>
                 </div>
 

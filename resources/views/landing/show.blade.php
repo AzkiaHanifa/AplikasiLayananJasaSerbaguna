@@ -127,8 +127,8 @@
 
                     {{-- ALAMAT TUJUAN --}}
                     <div class="mb-3">
-                        <label class="form-label">Alamat Tujuan</label>
-                        <textarea name="alamat_tujuan" class="form-control" rows="3" required>{{ Auth::user()->alamat ?? '' }}
+                        <label class="form-label">Catatan</label>
+                        <textarea name="alamat_tujuan" class="form-control" rows="3" >
                         </textarea>
                     </div>
                 </div>

@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\VerifMitraController;
 // Controller USER
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\MitraController;
+use App\Http\Controllers\User\InvoiceController;
 use App\Http\Controllers\User\UserJobController; // Controller untuk User
 
 // 'pending',
@@ -110,7 +111,19 @@ Route::middleware(['auth', 'roles:user'])
             [UserJobController::class, 'toggleStatus']
         );
 
+        // =====================
+        // INVOICE
+        // =====================
+        Route::get('/list-order/invoice/{transaksi_id}/create',[InvoiceController::class, 'create']);
+        Route::post('/list-order/invoice/{id}', [InvoiceController::class, 'store']);
+        Route::post('/list-order/invoice/{id}/bayar', [InvoiceController::class, 'konfirmasiPembayaran']);
+        Route::get('/list-order/invoice/{id}', [InvoiceController::class, 'show']);
+        Route::get('/list-order/invoice/{transaksi_id}/detail/{invoice_id}',[InvoiceController::class, 'detailInvoice']);
+        Route::get('/transaksi/invoice/{id}', [InvoiceController::class, 'showCustomer']);
+        Route::get('/transaksi/invoice/{transaksi_id}/detail/{invoice_id}',[InvoiceController::class, 'detailCustomer']);
+        Route::post('/transaksi/invoice/upload-bukti', [InvoiceController::class, 'uploadBukti']);
 
+        
 });
 
 // ================= MITRA =================

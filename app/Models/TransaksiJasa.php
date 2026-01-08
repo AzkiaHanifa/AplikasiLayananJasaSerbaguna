@@ -23,4 +23,33 @@ class TransaksiJasa extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
+    /**
+     * Relasi: 1 Transaksi Jasa punya banyak Invoice
+     */
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'transaksi_jasa_id');
+    }
+
+    /**
+     * Ambil invoice aktif (belum dibayar / menunggu)
+     */
+    public function invoiceAktif()
+    {
+        return $this->hasOne(Invoice::class, 'transaksi_jasa_id')
+            ->whereIn('status', ['draft', 'menunggu_pembayaran'])
+            ->latest();
+    }
+
+    /**
+     * Total pembayaran yang sudah dibayar
+     */
+    public function totalDibayar()
+    {
+        return $this->hasMany(Invoice::class, 'transaksi_jasa_id')
+            ->where('status', 'dibayar')
+            ->sum('total');
+    }
 }

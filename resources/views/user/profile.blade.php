@@ -16,7 +16,7 @@
 
             {{-- ================= 1. KARTU PROFIL ================= --}}
             <div class="card shadow border-0 overflow-hidden mb-4">
-                <div class="card-header bg-primary text-white p-4 text-center">
+                <div class="card-header p-3">
                     <h4 class="mb-0">Profil Saya</h4>
                 </div>
 
@@ -65,13 +65,21 @@
 
                             {{-- TOMBOL KEMBALI & EDIT --}}
                             <div class="mt-4 d-flex justify-content-between align-items-center">
-                                <a href="{{ route('user.home') }}" class="btn btn-secondary px-4">
-                                    <i class="bi bi-arrow-left me-2"></i> Kembali
-                                </a>
                                 <a href="{{ route('user.profile.edit') }}" class="btn btn-warning px-4 text-white">
                                     <i class="bi bi-pencil-square me-2"></i> Edit Profil
                                 </a>
+                                <a href="{{ route('logout') }}" 
+                                    class="btn btn-danger px-4"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form-dashboard').submit();">
+                                    Logout
+                                </a>
+    
+                                {{-- Form Hidden (Wajib ada untuk proses Logout Laravel) --}}
+                                <form id="logout-form-dashboard" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
                             </div>
+                            {{-- ================= AKHIR AREA MENU TAMBAHAN ================= --}}
                         </div>
                     </div>
                 </div>
@@ -163,17 +171,7 @@
                 </div>
             </div>
             
-            {{-- ================= AKHIR AREA MENU TAMBAHAN ================= --}}
-            <a href="{{ route('logout') }}" 
-                class="btn btn-danger px-4"
-                onclick="event.preventDefault(); document.getElementById('logout-form-dashboard').submit();">
-                Logout
-            </a>
-
-            {{-- Form Hidden (Wajib ada untuk proses Logout Laravel) --}}
-            <form id="logout-form-dashboard" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-            </form>
+            
 
         </div>
     </div>

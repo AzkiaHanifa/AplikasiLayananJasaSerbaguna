@@ -13,6 +13,7 @@ class Job extends Model
         'job_image',
         'description',
         'type',
+        'is_job',
         'location',
         'is_active',
         'category_id', // JANGAN LUPA DITAMBAHKAN
