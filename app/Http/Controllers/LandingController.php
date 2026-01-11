@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Job;      // Import Model Job
 use App\Models\Category; // Import Model Category (PENTING untuk Tab Filter)
+use App\Models\Banner;   // Import Model Banner
 
 class LandingController extends Controller
 {
@@ -25,9 +26,10 @@ class LandingController extends Controller
         // 2. Ambil semua data categories
         // Data ini Wajib ada karena digunakan untuk looping judul Tab (Vegetables, Fruits, dll) di view landing
         $categories = Category::all();
+        $banners = Banner::all();
 
         // 3. Kirim kedua variable ($jobs dan $categories) ke view 'landing'
-        return view('landing.index', compact('jobs', 'categories'));
+        return view('landing.index', compact('jobs', 'categories' ,'banners'));
     }
     public function show($id)
     {

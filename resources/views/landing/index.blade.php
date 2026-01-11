@@ -1,6 +1,7 @@
 @extends('layouts.user.main')
 
 @section('content')
+
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content rounded-0">
@@ -17,18 +18,42 @@
             </div>
         </div>
     </div>
+
     <div class="container-fluid py-5 mb-5 hero-header">
         <div class="container py-1">
             <div class="row g-5 align-items-center">
+                
                 <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
                     <div class="carousel-inner" role="listbox">
-                        <div class="carousel-item active rounded">
-                            <img src="{{ asset('assets/user/img/hero-img-1.png') }}" style="height: 400px; object-fit: cover;" class=" w-100 bg-secondary rounded" alt="First slide">
-                        </div>
-                        <div class="carousel-item rounded">
-                            <img src="{{ asset('assets/user/img/hero-img-2.jpg') }}" style="height: 400px; object-fit: cover;" class=" w-100 rounded" alt="Second slide">
-                        </div>
+                        
+                        {{-- Loop Data Banner dari Database --}}
+                        @forelse($banners as $key => $banner)
+                            <div class="carousel-item {{ $key == 0 ? 'active' : '' }} rounded">
+                                <img src="{{ asset('storage/' . $banner->image) }}" 
+                                     class="w-100 bg-secondary rounded" 
+                                     alt="{{ $banner->title ?? 'Banner Image' }}" 
+                                     style="height: 400px; object-fit: cover;">
+                                
+                                @if($banner->title)
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h3 class="text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+                                        {{ $banner->title }}
+                                    </h3>
+                                </div>
+                                @endif
+                            </div>
+                        @empty
+                            {{-- Tampilan Default (Jika Admin belum upload banner apapun) --}}
+                            <div class="carousel-item active rounded">
+                                <img src="{{ asset('assets/user/img/hero-img-1.png') }}" 
+                                     class="w-100 bg-secondary rounded" 
+                                     alt="Default Banner"
+                                     style="height: 400px; object-fit: cover;">
+                            </div>
+                        @endforelse
+
                     </div>
+                    
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Previous</span>
@@ -38,9 +63,10 @@
                         <span class="visually-hidden">Next</span>
                     </button>
                 </div>
-            </div>
+                </div>
         </div>
     </div>
+
     <div class="container-fluid featurs py-5">
         <div class="container py-5">
             <div class="row g-4">
@@ -91,6 +117,7 @@
             </div>
         </div>
     </div>
+
     <div class="container-fluid fruite py-5">
         <div class="container py-5">
             <div class="tab-class text-center">
@@ -99,26 +126,11 @@
                         <h1>Jasa Untuk Kamu</h1>
                     </div>
                     <div class="col-lg-8 text-end">
-                        {{-- <ul class="nav nav-pills d-inline-flex text-center mb-5">
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill" href="#tab-all">
-                                    <span class="text-dark" style="width: 130px;">Semua</span>
-                                </a>
-                            </li>
-                            
-                            @foreach($categories as $category)
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-{{ $category->id }}">
-                                    <span class="text-dark" style="width: 130px;">{{ $category->name }}</span>
-                                </a>
-                            </li>
-                            @endforeach
-                        </ul> --}}
+                        {{-- Tab Navigation (Commented Out as per original code) --}}
                     </div>
                 </div>
 
                 <div class="tab-content">
-                    
                     <div id="tab-all" class="tab-pane fade show p-0 active">
                         <div class="row g-4">
                             <div class="col-lg-12">
@@ -153,9 +165,9 @@
                                                     <div class="d-flex justify-content-between flex-lg-wrap">
                                                         <p class="text-dark fs-5 fw-bold mb-0"><i class="bi bi-geo-alt-fill"></i> {{ $job->location }}</p>
                                                         
-                                                            <a href="{{ route('job.show', $job->id) }}" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                                <i class="fa fa-shopping-bag me-2 text-primary"></i> Order
-                                                            </a>
+                                                        <a href="{{ route('job.show', $job->id) }}" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                            <i class="fa fa-shopping-bag me-2 text-primary"></i> Order
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </a>
@@ -167,13 +179,13 @@
                         </div>
                     </div>
                     
+                    {{-- Tab Per Category Logic --}}
                     @foreach($categories as $category)
                     <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0">
                         <div class="row g-4">
                             <div class="col-lg-12">
                                 <div class="row g-4">
                                     @php
-                                        // Filter collection jobs agar sesuai kategori tab saat ini
                                         $filteredJobs = $jobs->where('category_id', $category->id);
                                     @endphp
 
@@ -228,6 +240,7 @@
             </div>      
         </div>
     </div>
+
     <div class="container-fluid vesitable py-5">
         <div class="container py-5">
             <h1 class="mb-0">Jasa Terbaru</h1>
@@ -263,6 +276,7 @@
             </div>
         </div>
     </div>
+
     <div class="container-fluid banner bg-secondary my-5">
         <div class="container py-5">
             <div class="row g-4 align-items-center">
@@ -282,4 +296,5 @@
             </div>
         </div>
     </div>
-    @endsection
+
+@endsection
