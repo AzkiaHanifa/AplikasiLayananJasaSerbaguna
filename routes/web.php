@@ -71,6 +71,7 @@ Route::middleware(['auth', 'roles:admin'])
         Route::get('/mitra/verifikasi', [VerifMitraController::class, 'index'])->name('mitra.index');
         Route::patch('/mitra/{id}/approve', [VerifMitraController::class, 'approve'])->name('mitra.approve');
         Route::patch('/mitra/{id}/reject', [VerifMitraController::class, 'reject'])->name('mitra.reject');
+        Route::patch('/categories/{category}/toggle', [CategoryController::class, 'toggleFeatured'])->name('categories.toggle');
 });
 
 // ================= USER =================
