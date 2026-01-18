@@ -40,7 +40,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th>No Invoice</th>
-                                <th>Tipe</th>
+                                {{-- <th>Tipe</th> --}}
                                 <th>Total</th>
                                 <th>Status</th>
                                 <th>Dibuat</th>
@@ -51,11 +51,11 @@
                             @foreach($transaksi->invoices as $invoice)
                                 <tr>
                                     <td>{{ $invoice->invoice_number }}</td>
-                                    <td>
+                                    {{-- <td>
                                         <span class="badge bg-secondary">
                                             {{ ucfirst($invoice->tipe_invoice) }}
                                         </span>
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         Rp {{ number_format($invoice->total, 0, ',', '.') }}
                                     </td>

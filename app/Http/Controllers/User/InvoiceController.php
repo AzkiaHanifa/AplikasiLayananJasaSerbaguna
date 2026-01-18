@@ -20,7 +20,7 @@ class InvoiceController extends Controller
     public function store(Request $request, $transaksiId)
     {
         $request->validate([
-            'tipe_invoice' => 'required|in:estimasi,awal,tambahan,final',
+            // 'tipe_invoice' => 'required|in:estimasi,awal,tambahan,final',
             'items' => 'required|array',
             'items.*.deskripsi' => 'required|string',
             'items.*.qty' => 'required|integer|min:1',
@@ -37,7 +37,7 @@ class InvoiceController extends Controller
         $invoice = Invoice::create([
             'transaksi_jasa_id' => $transaksi->id,
             'invoice_number' => 'INV-' . now()->format('YmdHis'),
-            'tipe_invoice' => $request->tipe_invoice,
+            'tipe_invoice' => 'final',
             'subtotal' => $subtotal,
             'total' => $subtotal,
             'status' => 'menunggu_pembayaran',

@@ -37,11 +37,11 @@
                                 @endif
                             </td>
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <td>Tipe Invoice</td>
                             <td>:</td>
                             <td>{{ ucfirst($invoice->tipe_invoice) }}</td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <td>Tanggal</td>
                             <td>:</td>

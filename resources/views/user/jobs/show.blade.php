@@ -40,7 +40,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th>No Invoice</th>
-                                <th>Tipe</th>
+                                {{-- <th>Tipe</th> --}}
                                 <th>Total</th>
                                 <th>Status</th>
                                 <th>Dibuat</th>
@@ -51,11 +51,11 @@
                             @foreach($transaksi->invoices as $invoice)
                                 <tr>
                                     <td>{{ $invoice->invoice_number }}</td>
-                                    <td>
+                                    {{-- <td>
                                         <span class="badge bg-secondary">
                                             {{ ucfirst($invoice->tipe_invoice) }}
                                         </span>
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         Rp {{ number_format($invoice->total, 0, ',', '.') }}
                                     </td>
@@ -116,26 +116,38 @@
         <div class="card-body">
             <h5 class="mb-3">Aksi</h5>
 
-            {{-- BUAT INVOICE --}}
-            @if(in_array($transaksi->status, ['diterima', 'menunggu_pembayaran']))
-                <a href="{{ url('/user/list-order/invoice/'.$transaksi->id.'/create') }}"
-                   class="btn btn-primary">
-                    Buat Invoice
-                </a>
-            @endif
+            <div class="d-flex " style="justify-content: space-between">
 
-            {{-- SELESAIKAN TRANSAKSI --}}
-            @if($transaksi->status == 'dalam_proses')
-                <form action="{{ url('/transaksi-jasa/'.$transaksi->id.'/selesai') }}"
-                      method="POST"
-                      class="d-inline">
-                    @csrf
-                    <button class="btn btn-success"
-                            onclick="return confirm('Selesaikan transaksi ini?')">
-                        Tandai Selesai
+                {{-- BUAT INVOICE --}}
+                @if(in_array($transaksi->status, ['diterima', 'menunggu_pembayaran']))
+                    <a href="{{ url('/user/list-order/invoice/'.$transaksi->id.'/create') }}"
+                       class="btn btn-primary">
+                        Buat Invoice
+                    </a>
+                @endif
+                <div>
+
+                    
+                    <form action="{{ url('/transaksi-jasa/'.$transaksi->id.'/dalam-proses') }}"
+                        method="POST"
+                        class="d-inline">
+                        @csrf
+                        <button class="btn btn-warning"
+                        onclick="return confirm('Proses transaksi ini?')">
+                        Proses Pesanan
                     </button>
                 </form>
-            @endif
+                <form action="{{ url('/transaksi-jasa/'.$transaksi->id.'/selesai') }}"
+                    method="POST"
+                    class="d-inline">
+                    @csrf
+                    <button class="btn btn-success"
+                    onclick="return confirm('Selesaikan transaksi ini?')">
+                    Tandai Selesai
+                </button>
+            </form>
+        </div>
+            </div>
 
         </div>
     </div>

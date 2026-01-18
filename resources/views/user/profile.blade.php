@@ -93,7 +93,8 @@
                 - Jika belum daftar mitra ($mitra == null) -> Tampilkan Tombol Daftar.
                 - Jika sudah daftar -> Tampilkan Status & Tombol Kelola Jasa.
             --}}
-            @if ($mitra)
+            
+            @if ($mitra && $job)
                 <div class="card shadow border-0 overflow-hidden bg-white mb-3">
                     <div class="card-body p-4">
                         <a href="/user/list-order" class="btn btn-outline-primary mb-2">Lihat Orderan Saya</a>

@@ -20,7 +20,7 @@
         @csrf
 
         {{-- Tipe Invoice --}}
-        <div class="mb-3">
+        {{-- <div class="mb-3">
             <label class="form-label">Tipe Invoice</label>
             <select name="tipe_invoice" class="form-control" required>
                 <option value="">-- Pilih --</option>
@@ -29,7 +29,7 @@
                 <option value="tambahan">Invoice Tambahan</option>
                 <option value="final">Invoice Final</option>
             </select>
-        </div>
+        </div> --}}
 
         {{-- Keterangan --}}
         <div class="mb-3">
