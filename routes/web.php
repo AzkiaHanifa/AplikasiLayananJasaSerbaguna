@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\JobController; // Controller untuk Admin
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Admin\VerifMitraController;
+use App\Http\Controllers\Admin\BannerController;
 
 // Controller USER
 use App\Http\Controllers\User\UserController;
@@ -64,11 +65,13 @@ Route::middleware(['auth', 'roles:admin'])
         Route::resource('jobs', JobController::class);
         Route::resource('categories', CategoryController::class);
         Route::resource('users', UserManagementController::class);
+        Route::resource('banners', BannerController::class)->only(['index', 'store', 'destroy']);
         
         // Verifikasi Mitra
         Route::get('/mitra/verifikasi', [VerifMitraController::class, 'index'])->name('mitra.index');
         Route::patch('/mitra/{id}/approve', [VerifMitraController::class, 'approve'])->name('mitra.approve');
         Route::patch('/mitra/{id}/reject', [VerifMitraController::class, 'reject'])->name('mitra.reject');
+        Route::patch('/categories/{category}/toggle', [CategoryController::class, 'toggleFeatured'])->name('categories.toggle');
 });
 
 // ================= USER =================
