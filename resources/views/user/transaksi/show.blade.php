@@ -110,6 +110,22 @@
         </div>
     </div>
 
+    @if ($transaksi->status == 'selesai')
+        
+    {{-- AKSI UTAMA --}}
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="mb-3">Aksi</h5>
+            
+            <div class="d-flex " style="justify-content: space-between">
+                <a href="{{ url('/user/list-order/invoice/'.$transaksi->id.'/ulasan') }}"
+                    class="btn btn-primary">
+                    <i class="fa fa-star me-1"></i> Berikan Penilaian
+                </a>
+            </div>
+        </div> 
+    </div>
+    @endif
 </div>
 
 <!-- Modal Preview Bukti Pembayaran -->

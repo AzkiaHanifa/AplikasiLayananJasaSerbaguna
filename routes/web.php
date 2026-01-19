@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\TransaksiJasaController;
 
 // Controller ADMIN
 use App\Http\Controllers\Admin\JobController; // Controller untuk Admin
@@ -64,6 +65,7 @@ Route::middleware(['auth', 'roles:admin'])
         // Resource Admin
         Route::resource('jobs', JobController::class);
         Route::resource('categories', CategoryController::class);
+        Route::resource('transaksi', TransaksiJasaController::class);
         Route::resource('users', UserManagementController::class);
         Route::resource('banners', BannerController::class)->only(['index', 'store', 'destroy']);
         
@@ -107,6 +109,8 @@ Route::middleware(['auth', 'roles:user'])
         Route::post('/transaksi/diterima/{id}', [UserJobController::class, 'terimaTransaksi']);
         
         Route::get('/transaksi', [UserController::class, 'transaksi']);
+        Route::get('/riwayat/jobs', [UserJobController::class, 'riwayat']);
+        Route::get('/riwayat', [UserController::class, 'riwayat']);
         Route::post('/order-jasa', [UserController::class, 'orderJasa'])
         ->name('order.jasa');
         Route::post('/transaksi/batalkan/{id}', [UserController::class, 'batalOrderJasa']);
@@ -122,10 +126,11 @@ Route::middleware(['auth', 'roles:user'])
         Route::post('/list-order/invoice/{id}/bayar', [InvoiceController::class, 'konfirmasiPembayaran']);
         Route::get('/list-order/invoice/{id}', [InvoiceController::class, 'show']);
         Route::get('/list-order/invoice/{transaksi_id}/detail/{invoice_id}',[InvoiceController::class, 'detailInvoice']);
+        Route::post('/list-order/invoice/{id}/proses', [InvoiceController::class, 'prosesPesanan']);
+        Route::post('/list-order/invoice/{id}/selesai', [InvoiceController::class, 'tandaiSelesai']);
         Route::get('/transaksi/invoice/{id}', [InvoiceController::class, 'showCustomer']);
         Route::get('/transaksi/invoice/{transaksi_id}/detail/{invoice_id}',[InvoiceController::class, 'detailCustomer']);
         Route::post('/transaksi/invoice/upload-bukti', [InvoiceController::class, 'uploadBukti']);
-
         
 });
 

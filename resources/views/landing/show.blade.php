@@ -10,7 +10,7 @@
     </ol>
 </div>
 
-<div class="container-fluid py-5 mt-5">
+<div class="container-fluid py-5 ">
     <div class="container py-5">
         <div class="row g-4 mb-5">
             <div class="col-lg-8 col-xl-9">
@@ -128,8 +128,7 @@
                     {{-- ALAMAT TUJUAN --}}
                     <div class="mb-3">
                         <label class="form-label">Catatan</label>
-                        <textarea name="alamat_tujuan" class="form-control" rows="3" >
-                        </textarea>
+                        <textarea name="alamat_tujuan" class="form-control" rows="3" ></textarea>
                     </div>
                 </div>
 

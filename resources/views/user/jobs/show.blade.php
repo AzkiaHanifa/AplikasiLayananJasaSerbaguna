@@ -111,46 +111,48 @@
         </div>
     </div>
 
+    @if ($transaksi->status != 'selesai')
+        
     {{-- AKSI UTAMA --}}
     <div class="card shadow-sm">
         <div class="card-body">
             <h5 class="mb-3">Aksi</h5>
-
+            
             <div class="d-flex " style="justify-content: space-between">
-
+                
                 {{-- BUAT INVOICE --}}
-                @if(in_array($transaksi->status, ['diterima', 'menunggu_pembayaran']))
-                    <a href="{{ url('/user/list-order/invoice/'.$transaksi->id.'/create') }}"
-                       class="btn btn-primary">
-                        Buat Invoice
-                    </a>
+                @if($transaksi->status != 'selesai')
+                <a href="{{ url('/user/list-order/invoice/'.$transaksi->id.'/create') }}"
+                    class="btn btn-primary">
+                    Buat Invoice
+                </a>
                 @endif
                 <div>
-
                     
-                    <form action="{{ url('/transaksi-jasa/'.$transaksi->id.'/dalam-proses') }}"
+                    
+                    <form action="{{ url('/user/list-order/invoice/'.$transaksi->id.'/proses') }}"
                         method="POST"
                         class="d-inline">
                         @csrf
-                        <button class="btn btn-warning"
-                        onclick="return confirm('Proses transaksi ini?')">
-                        Proses Pesanan
+                        <button class="btn btn-warning" {{$transaksi->status == 'dalam_proses' ? 'disabled' : ''}}
+                            onclick="return confirm('Proses transaksi ini?')">
+                            Proses Pesanan
+                        </button>
+                    </form>
+                    <form action="{{ url('/user/list-order/invoice/'.$transaksi->id.'/selesai') }}"
+                        method="POST"
+                        class="d-inline">
+                        @csrf
+                        <button class="btn btn-success"
+                        onclick="return confirm('Selesaikan transaksi ini?')">
+                        Tandai Selesai
                     </button>
                 </form>
-                <form action="{{ url('/transaksi-jasa/'.$transaksi->id.'/selesai') }}"
-                    method="POST"
-                    class="d-inline">
-                    @csrf
-                    <button class="btn btn-success"
-                    onclick="return confirm('Selesaikan transaksi ini?')">
-                    Tandai Selesai
-                </button>
-            </form>
-        </div>
             </div>
-
-        </div>
+        </div> 
     </div>
+</div>
+@endif
 
 </div>
 
@@ -168,6 +170,19 @@
                      src=""
                      class="img-fluid rounded"
                      alt="Bukti Pembayaran">
+                     <br><br>
+                     @if($invoice->status == 'dibayar')
+                        <form action="/user/list-order/invoice/{{ $transaksi->id }}/bayar"
+                            method="POST"
+                            class="d-inline">
+                            @csrf
+                            <input type="hidden" name="id_invoice" value="{{$invoice->id}}">
+                            <button class="btn btn-success"
+                                    onclick="return confirm('Konfirmasi pembayaran invoice ini?')">
+                                Konfirmasi Pembayaran
+                            </button>
+                        </form>
+                    @endif
             </div>
         </div>
     </div>

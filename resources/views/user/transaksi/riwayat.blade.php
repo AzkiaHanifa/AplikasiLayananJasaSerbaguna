@@ -5,7 +5,7 @@
 <div class="container py-5">
 
     <div class="d-flex justify-content-between align-items-center mb-2">
-        <h4 class="fw-bold">Orderan</h4>
+        <h4 class="fw-bold">Riwayat</h4>
     </div>
 
     @if(session('success'))
@@ -16,7 +16,7 @@
     @endif
 
     @forelse($transaksi as $item)
-    @if ($item->status != 'selesai' && $item->status != 'dibatalkan')
+    @if ($item->status == 'selesai' || $item->status == 'dibatalkan')
         <div class="card shadow-sm border mb-3">
             <div class="card-body">
                 @if ($item->status == 'pending')

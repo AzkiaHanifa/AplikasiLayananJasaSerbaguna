@@ -12,11 +12,11 @@
             </a>
 
             <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white p-4">
+                <div class="card-header p-4">
                     <h4 class="mb-0 fw-bold">
                         <i class="bi bi-megaphone-fill me-2"></i> Pasang Iklan Jasa Baru
                     </h4>
-                    <p class="mb-0 small text-white-50">Tawarkan keahlian Anda kepada calon pelanggan.</p>
+                    <p class="mb-0 small">Tawarkan keahlian Anda kepada calon pelanggan.</p>
                 </div>
 
                 <div class="card-body p-4">

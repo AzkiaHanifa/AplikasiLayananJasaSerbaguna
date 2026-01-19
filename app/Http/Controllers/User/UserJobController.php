@@ -26,6 +26,15 @@ class UserJobController extends Controller
         return view('user.jobs.list-order', compact('transaksi'));
     }
 
+    public function riwayat()
+    {
+        $userId = Auth::id();
+        $jasa = Job::where('user_id', $userId)->first();
+        // Cek apakah user ini SUDAH punya jasa
+        $transaksi = TransaksiJasa::where('job_id', $jasa->id)->orderBy('created_at', 'desc')->get();
+        return view('user.jobs.riwayat', compact('transaksi'));
+    }
+
     public function manage()
     {
         $userId = Auth::id();

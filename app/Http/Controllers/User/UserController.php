@@ -21,6 +21,13 @@ class UserController extends Controller
         return view('user.home', compact('user'));
     }
 
+    public function riwayat()
+    {
+        $userId = Auth::id();
+        $transaksi = TransaksiJasa::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
+        return view('user.transaksi.riwayat', compact('transaksi'));
+    }
+
     public function showProfile()
     {
         $user = Auth::user();
@@ -120,5 +127,5 @@ class UserController extends Controller
         return back()->with('success', 'Pesanan berhasil dibatalkan');
     }
 
-
+    
 }

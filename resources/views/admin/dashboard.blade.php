@@ -5,7 +5,7 @@
     <br><br>
     <h1 class="mb-4">Selamat Datang di Dashboard Admin</h1>
 
-    <div class="row mb-4">
+    <div class="row ">
         <div class="col-md-4">
             <div class="card border border-light shadow-sm bg-white text-dark h-100">
                 <div class="card-body p-4 d-flex align-items-center justify-content-between">
@@ -45,6 +45,26 @@
         </div>
 
         <div class="col-md-4">
+            <div class="card border border-light shadow-sm bg-white text-dark h-100">
+                <div class="card-body p-4 d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="text-uppercase text-muted mb-1" style="font-size: 0.8rem;">Total Transaksi</h6>
+                        <h2 class="mb-0 fw-bold text-danger">{{ $totalTransaksi }}</h2>
+                    </div>
+                    <div class="fs-1 text-gray-300">
+                        <i class="fas fa-receipt text-muted opacity-25"></i>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top border-light small">
+                    <a href="{{ route('admin.transaksi.index') }}" class="text-danger text-decoration-none fw-bold">
+                        Lihat Detail <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <br>
             <div class="card border border-light shadow-sm bg-white text-dark h-100">
                 <div class="card-body p-4 d-flex align-items-center justify-content-between">
                     <div>

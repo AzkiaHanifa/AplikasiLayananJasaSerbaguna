@@ -97,7 +97,6 @@
             @if ($mitra && $job)
                 <div class="card shadow border-0 overflow-hidden bg-white mb-3">
                     <div class="card-body p-4">
-                        <a href="/user/list-order" class="btn btn-outline-primary mb-2">Lihat Orderan Saya</a>
                         <h5>Aktif/Non Aktif Jasa</h5>
                         <small class="">Aktifkan status jasa anda jika jasa anda tersedia.</small><br>
                         <form action="/user/jobs/{{ $job->id }}/toggle-status"

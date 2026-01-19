@@ -14,7 +14,7 @@
     </div>
     <div class="container px-0">
         <nav class="navbar navbar-light bg-white navbar-expand-xl">
-            <a href="/" class="navbar-brand d-flex mt-2"><img src="{{asset('images/logo-lpjs.png')}}" class="me-3" style="width: 40px; height: 40px;" alt=""><h1 class="text-primary display-6">LPJS</h1></a>
+            <a href="/" class="navbar-brand d-flex mt-2"><img src="{{asset('images/logo-lpjs.png')}}" class="me-3" style="width: 130px;" alt=""></a>
             <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="fa fa-bars text-primary"></span>
             </button>
@@ -33,13 +33,27 @@
                 </div> --}}
                 @if (auth()->check())
                     <div class="d-flex m-3 me-0">
+                        @if (Auth::user()->mitra)
+                        <a href="/user/list-order" class="btn btn-outline-primary btn-lg me-2">
+                            Orderan
+                        </a>
                         <a href="/user/transaksi" class="btn btn-outline-primary btn-lg me-4">
                             Pesanan Saya
                         </a>
-                        <a href="#" class="position-relative me-4 my-auto">
-                            <i class="fa fa-bell fa-2x"></i>
-                            <span class="position-absolute bg-danger rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;"></span>
+                        @else
+                        <a href="/user/transaksi" class="btn btn-outline-primary btn-lg me-4">
+                            Pesanan Saya
                         </a>
+                        @endif
+                        @if (Auth::user()->mitra)
+                        <a href="/user/riwayat/jobs" class="position-relative me-4 my-auto">
+                            <i class="fa fa-history fa-2x"></i>
+                        </a>
+                        @else
+                        <a href="/user/riwayat" class="position-relative me-4 my-auto">
+                            <i class="fa fa-history fa-2x"></i>
+                        </a>
+                        @endif
                         <a href="{{ route('user.profile') }}" class="mt-1">
                             <i class="fas fa-user fa-2x"></i>
                         </a>

@@ -5,7 +5,7 @@
 <div class="container py-5">
 
     <div class="d-flex justify-content-between align-items-center mb-2">
-        <h4 class="fw-bold">Riwayat Transaksi</h4>
+        <h4 class="fw-bold">Pesanan Saya</h4>
     </div>
 
     @if(session('success'))
@@ -16,6 +16,7 @@
     @endif
 
     @forelse($transaksi as $item)
+    @if ($item->status != 'selesai' && $item->status != 'dibatalkan')
         <div class="card shadow-sm border mb-3">
             <div class="card-body">
                 @if ($item->status == 'pending')
@@ -140,7 +141,7 @@
                 @endif
             </div>
         </div>
-
+@endif
     @empty
         <div class="text-center py-5">
             <img src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png" width="120" class="mb-3">

@@ -148,24 +148,6 @@
         </div>
     </div>
 
-    {{-- AKSI --}}
-    <div class="card shadow-sm">
-        <div class="card-body text-end">
-
-            @if($invoice->status == 'menunggu_pembayaran')
-                <form action="/user/list-order/invoice/{{ $invoice->id }}/bayar"
-                      method="POST"
-                      class="d-inline">
-                    @csrf
-                    <button class="btn btn-success"
-                            onclick="return confirm('Konfirmasi pembayaran invoice ini?')">
-                        Konfirmasi Pembayaran
-                    </button>
-                </form>
-            @endif
-
-        </div>
-    </div>
 
 </div>
 @endsection

@@ -12,7 +12,8 @@ class TransaksiJasaController extends Controller
      */
     public function index()
     {
-        //
+        $transaksi = TransaksiJasa::latest()->paginate(10);
+        return view('admin.transaksi.index', compact('transaksi'));
     }
 
     /**

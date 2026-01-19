@@ -115,19 +115,38 @@ class InvoiceController extends Controller
      */
     public function konfirmasiPembayaran(Request $request, $id)
     {
-        $invoice = Invoice::findOrFail($id);
+        $invoice = Invoice::findOrFail($request->id_invoice);
 
         $invoice->update([
-            'status' => 'dibayar',
+            'status' => 'lunas',
             'dibayar_pada' => now(),
         ]);
 
-        // Update transaksi ke dalam proses
-        $invoice->transaksi()->update([
-            'status' => 'dalam_proses'
+        return redirect('/user/list-order/invoice/' . $id)
+            ->with('success', 'Pembayaran berhasil dikonfirmasi');
+    }
+
+    public function prosesPesanan(Request $request, $id)
+    {
+        $transaksi = TransaksiJasa::findOrFail($id);
+
+        $transaksi->update([
+            'status' => 'dalam_proses',
         ]);
 
-        return redirect('/user/list-order/invoice/' . $transaksi->id)
-            ->with('success', 'Pembayaran berhasil dikonfirmasi');
+        return redirect('/user/list-order/invoice/' . $id)
+            ->with('success', 'Pesanan diproses');
+    }
+
+    public function tandaiSelesai(Request $request, $id)
+    {
+        $transaksi = TransaksiJasa::findOrFail($id);
+
+        $transaksi->update([
+            'status' => 'selesai',
+        ]);
+
+        return redirect('/user/list-order/invoice/' . $id)
+            ->with('success', 'Pesanan berhasil diselesaikan');
     }
 }

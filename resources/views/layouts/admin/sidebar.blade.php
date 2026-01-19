@@ -10,19 +10,19 @@
                             class="hide-menu">Dashboard</span></a></li>
                 <li class="sidebar-item"> <a
                         class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('admin/transaksi') ? 'bg-primary' : '' }}"
-                        href="/admin/transaksi" aria-expanded="false"><i class="fa-solid fa-car me-2"></i><span
+                        href="/admin/transaksi" aria-expanded="false"><i class="fa-solid fa-receipt me-2"></i><span
                             class="hide-menu">Transaksi</span></a></li>
                 <li class="sidebar-item"> <a
                         class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('admin/jobs') ? 'bg-primary' : '' }}"
-                        href="/admin/jobs" aria-expanded="false"><i class="fa-solid fa-car me-2"></i><span
+                        href="/admin/jobs" aria-expanded="false"><i class="fa-solid fa-briefcase me-2"></i><span
                             class="hide-menu">Pekerjaan</span></a></li>
                 <li class="sidebar-item"> <a
                         class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('admin/mitra/verifikasi') ? 'bg-primary' : '' }}"
-                        href="/admin/mitra/verifikasi" aria-expanded="false"><i class="fa-solid fa-receipt me-2"></i><span
+                        href="/admin/mitra/verifikasi" aria-expanded="false"><i class="fa-solid fa-address-card me-2"></i><span
                             class="hide-menu">Verifikasi Data</span></a></li>
                 <li class="sidebar-item"> <a
                         class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('admin/categories') ? 'bg-primary' : '' }}"
-                        href="/admin/categories" aria-expanded="false"><i class="fa-solid fa-address-card me-2"></i><span
+                        href="/admin/categories" aria-expanded="false"><i class="fa-solid fa-layer-group me-2"></i><span
                             class="hide-menu">Kategori Jasa</span></a></li>
                 <li class="sidebar-item"> <a
                         class="sidebar-link waves-effect waves-dark sidebar-link {{ Request::is('admin/users') ? 'bg-primary' : '' }}"
