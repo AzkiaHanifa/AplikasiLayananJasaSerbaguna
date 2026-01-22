@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Job;      // Import Model Job
 use App\Models\Category; // Import Model Category (PENTING untuk Tab Filter)
 use App\Models\Banner;   // Import Model Banner
+use Illuminate\Support\Facades\DB;
 
 class LandingController extends Controller
 {
@@ -14,30 +15,59 @@ class LandingController extends Controller
      */
     public function index()
     {
-        // 1. Ambil data jobs (Jasa)
-        // - with('category'): Eager load relasi category agar query lebih cepat/ringan
-        // - where('is_active', true): Hanya tampilkan job yang statusnya aktif
-        // - latest(): Urutkan dari yang paling baru dibuat
         $jobs = Job::with('category')
-                    ->where('is_active', true)
-                    ->latest()
-                    ->get();
+            ->where('is_active', true)
+            ->withAvg([
+                'transaksi as avg_rating' => function ($q) {
+                    $q->join(
+                            'ulasan_jasa',
+                            'transaksi_jasa.id',
+                            '=',
+                            'ulasan_jasa.transaksi_jasa_id'
+                        )
+                    ->where('transaksi_jasa.status', 'selesai');
+                }
+            ], 'ulasan_jasa.rating')
+            ->latest()->paginate(16)
+            ;
 
-        // 2. Ambil semua data categories
-        // Data ini Wajib ada karena digunakan untuk looping judul Tab (Vegetables, Fruits, dll) di view landing
         $categories = Category::all();
         $banners = Banner::all();
 
-        // 3. Kirim kedua variable ($jobs dan $categories) ke view 'landing'
-        return view('landing.index', compact('jobs', 'categories' ,'banners'));
+        return view('landing.index', compact('jobs', 'categories', 'banners'));
     }
     public function show($id)
     {
-        // Ambil data job berdasarkan ID, sertakan relasi category dan user (pemilik jasa)
-        // findOrFail berfungsi jika ID tidak ditemukan akan otomatis 404
         $job = Job::with(['category', 'user'])->findOrFail($id);
 
-        // Arahkan ke view detail
-        return view('landing.show', compact('job'));
+        $ulasan = \App\Models\UlasanJasa::whereHas('transaksi', function ($q) use ($id) {
+                $q->where('job_id', $id)
+                ->where('status', 'selesai');
+            })
+            ->with('transaksi.user')
+            ->latest()
+            ->get();
+
+        $avgRating = round($ulasan->avg('rating') ?? 0, 1);
+        $totalUlasan = $ulasan->count();
+
+        return view('landing.show', compact(
+            'job',
+            'ulasan',
+            'avgRating',
+            'totalUlasan'
+        ));
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->q;
+
+        $jobs = Job::where('title', 'LIKE', '%' . $keyword . '%')
+                    ->latest()
+                    ->paginate(16)
+                    ->withQueryString();
+
+        return view('landing.search', compact('jobs', 'keyword'));
     }
 } // End Class

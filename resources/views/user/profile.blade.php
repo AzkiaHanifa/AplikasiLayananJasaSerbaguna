@@ -15,9 +15,9 @@
             @endif
 
             {{-- ================= 1. KARTU PROFIL ================= --}}
-            <div class="card shadow border-0 overflow-hidden mb-4">
-                <div class="card-header p-3">
-                    <h4 class="mb-0">Profil Saya</h4>
+            <div class="card border overflow-hidden mb-4">
+                <div class="card-header bg-white p-3">
+                    <h5 class="mb-0">Profil Saya</h5>
                 </div>
 
                 <div class="card-body p-4">
@@ -95,32 +95,28 @@
             --}}
             
             @if ($mitra && $job)
-                <div class="card shadow border-0 overflow-hidden bg-white mb-3">
+                <div class="card overflow-hidden bg-white mb-3">
                     <div class="card-body p-4">
                         <h5>Aktif/Non Aktif Jasa</h5>
                         <small class="">Aktifkan status jasa anda jika jasa anda tersedia.</small><br>
-                        <form action="/user/jobs/{{ $job->id }}/toggle-status"
-                            method="POST"
-                            class="d-inline "
-                            onsubmit="return confirm('Ubah status jasa ini?')">
+                        <form action="/user/jobs/{{ $job->id }}/toggle-status" method="POST">
                             @csrf
-                            
-                            @if($job->is_job == 'tersedia')
-                            <input type="hidden" name="status" value="tidak tersedia">
-                            <button class="btn btn-success btn-lg rounded-pill mt-2">
-                                <i class="fa fa-check-circle me-1"></i> Aktif
-                            </button>
-                            @else
-                            <input type="hidden" name="status" value="tersedia">
-                            <button class="btn btn-outline-secondary btn-lg rounded-pill mt-2">
-                                <i class="fa fa-times-circle me-1"></i> Non Aktif
-                            </button>
-                            @endif
+
+                            <div class="form-check form-switch mt-1">
+                                <input 
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    role="switch"
+                                    onchange="this.form.submit()"
+                                    {{ $job->is_job === 'tersedia' ? 'checked' : '' }}
+                                    style="cursor: pointer; transform: scale(1.3); cursor:pointer;"
+                                >
+                            </div>
                         </form>
                     </div>
                 </div>
             @endif
-            <div class="card shadow border-0 overflow-hidden bg-white mb-3">
+            <div class="card overflow-hidden bg-white mb-3">
                 <div class="card-body p-4">
                     <div class="row align-items-center">
                         <div class="col-md-8">

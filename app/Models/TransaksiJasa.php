@@ -24,6 +24,11 @@ class TransaksiJasa extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function ulasan()
+    {
+        return $this->hasOne(UlasanJasa::class, 'transaksi_jasa_id');
+    }
+    
 
     /**
      * Relasi: 1 Transaksi Jasa punya banyak Invoice

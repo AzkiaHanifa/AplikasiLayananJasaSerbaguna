@@ -82,11 +82,6 @@
                             </td>
                         </tr>
                     </table>
-
-                    <a href="/user/list-order/invoice/{{ $invoice->transaksi->id }}"
-                       class="btn btn-outline-secondary btn-sm mt-3">
-                        ← Kembali ke Transaksi
-                    </a>
                 </div>
             </div>
         </div>

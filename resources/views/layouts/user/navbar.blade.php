@@ -19,15 +19,27 @@
                 <span class="fa fa-bars text-primary"></span>
             </button>
             <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
-                <div class="search-wrapper d-flex gap-2 col-sm-6">
-                    <div class="search-box">
-                        <i class="bi bi-search search-icon"></i>
-                        <input type="text" class="form-control search-input shadow-sm" placeholder="Cari jasa yang Anda butuhkan...">
+                <form action="{{ route('jobs.search') }}" method="GET"
+                    class="search-wrapper d-flex gap-2 col-sm-6">
+
+                    <div class="search-box position-relative flex-grow-1">
+                        <i class="bi bi-search search-icon position-absolute"
+                        style="left:10px; top:50%; transform:translateY(-50%);"></i>
+
+                        <input
+                            type="text"
+                            name="q"
+                            value="{{ request('q') }}"
+                            class="form-control search-input shadow-sm ps-5"
+                            placeholder="Cari jasa yang Anda butuhkan..."
+                        >
                     </div>
+
                     <button class="btn btn-primary btn-search shadow-sm text-white">
                         Cari Jasa
                     </button>
-                </div>
+                </form>
+
                 {{-- <div class="navbar-nav mx-auto">
                     <a href="contact.html" class="nav-item nav-link">Contact</a>
                 </div> --}}

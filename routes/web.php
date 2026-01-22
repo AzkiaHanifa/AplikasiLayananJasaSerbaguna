@@ -40,6 +40,10 @@ use App\Http\Controllers\User\UserJobController; // Controller untuk User
 
 Route::get('/', [LandingController::class, 'index'])->name('home.landing');
 Route::get('/jasa/{id}', [LandingController::class, 'show'])->name('job.show');
+Route::get('/kategori/{slug}', [CategoryController::class, 'show'])->name('kategori.show');
+Route::get('/jobs/search', [LandingController::class, 'search'])->name('jobs.search');
+
+
 
 // Auth
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
@@ -131,6 +135,8 @@ Route::middleware(['auth', 'roles:user'])
         Route::get('/transaksi/invoice/{id}', [InvoiceController::class, 'showCustomer']);
         Route::get('/transaksi/invoice/{transaksi_id}/detail/{invoice_id}',[InvoiceController::class, 'detailCustomer']);
         Route::post('/transaksi/invoice/upload-bukti', [InvoiceController::class, 'uploadBukti']);
+
+        Route::post('/transaksi/ulasan', [UserController::class, 'store'])->name('ulasan.store');
         
 });
 

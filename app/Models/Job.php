@@ -22,6 +22,16 @@ class Job extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function transaksi()
+    {
+        return $this->hasMany(TransaksiJasa::class, 'job_id');
+    }
+    public function getRatingAttribute()
+    {
+        return number_format($this->avg_rating ?? 0, 1);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

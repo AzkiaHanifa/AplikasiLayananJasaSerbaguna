@@ -67,10 +67,15 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        $transaksi = TransaksiJasa::findOrFail($id);
-        $invoice = Invoice::where('transaksi_jasa_id', $id)->orderBy('created_at', 'desc')->get();
+        $transaksi = TransaksiJasa::with('ulasan')->findOrFail($id);
+
+        $invoice = Invoice::where('transaksi_jasa_id', $id)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
         return view('user.jobs.show', compact('invoice', 'transaksi'));
     }
+
     public function detailInvoice($transaksi_id, $invoice_id)
     {
         $transaksi = TransaksiJasa::findOrFail($transaksi_id);

@@ -109,22 +109,51 @@
             @endif
         </div>
     </div>
-
     @if ($transaksi->status == 'selesai')
-        
-    {{-- AKSI UTAMA --}}
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h5 class="mb-3">Aksi</h5>
-            
-            <div class="d-flex " style="justify-content: space-between">
-                <a href="{{ url('/user/list-order/invoice/'.$transaksi->id.'/ulasan') }}"
-                    class="btn btn-primary">
-                    <i class="fa fa-star me-1"></i> Berikan Penilaian
-                </a>
-            </div>
-        </div> 
-    </div>
+        {{-- AKSI UTAMA --}}
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="mb-3">Ulasan Anda</h5>
+
+                    @if($transaksi->ulasan)
+                        {{-- Rating --}}
+                        @php $rating = $transaksi->ulasan->rating ?? 0; @endphp
+
+                        <div class="mb-2">
+                            @for($i = 1; $i <= 5; $i++)
+                                <i class="{{ $i <= $rating ? 'fa fa-star text-warning' : 'fa fa-star star-empty' }}"></i>
+                            @endfor
+                        </div>
+
+                        {{-- Text --}}
+                        @if($transaksi->ulasan->ulasan)
+                            <p class="mb-1">
+                                "{{ $transaksi->ulasan->ulasan }}"
+                            </p>
+                        @else
+                            <p class="text-muted fst-italic">
+                                Tidak ada komentar.
+                            </p>
+                        @endif
+
+                        <small class="text-muted">
+                            Diberikan pada {{ $transaksi->ulasan->created_at->format('d M Y') }}
+                        </small>
+                    @else
+                        <p class="text-muted mb-3">
+                            Anda belum memberikan ulasan untuk transaksi ini.
+                        </p>
+
+                        {{-- Tombol buka modal --}}
+                        <button class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#ulasanModal"
+                                onclick="setTransaksi({{ $transaksi->id }})">
+                            <i class="fa fa-star me-1"></i> Berikan Penilaian
+                        </button>
+                    @endif
+            </div> 
+        </div>
     @endif
 </div>
 
@@ -191,6 +220,80 @@
         </form>
     </div>
 </div>
+
+<!-- Modal Ulasan -->
+<div class="modal fade" id="ulasanModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <form method="POST" action="/user/transaksi/ulasan" class="modal-content">
+            @csrf
+
+            <input type="hidden" name="transaksi_id" id="transaksi_id">
+            <input type="hidden" name="rating" id="rating">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Beri Penilaian</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center">
+
+                {{-- Bintang --}}
+                <div class="mb-3">
+                    <i class="fa fa-star fa-2x star" data-value="1"></i>
+                    <i class="fa fa-star fa-2x star" data-value="2"></i>
+                    <i class="fa fa-star fa-2x star" data-value="3"></i>
+                    <i class="fa fa-star fa-2x star" data-value="4"></i>
+                    <i class="fa fa-star fa-2x star" data-value="5"></i>
+                </div>
+
+                {{-- Text --}}
+                <textarea name="ulasan"
+                          class="form-control"
+                          rows="3"
+                          placeholder="Tulis ulasan (opsional)"></textarea>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit">
+                    Kirim Penilaian
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .star {
+        cursor: pointer;
+        color: #ccc;
+    }
+    .star.active {
+        color: #f5b301;
+    }
+    .star-empty {
+        color: #d1d5db;
+    }
+</style>
+
+<script>
+    function setTransaksi(id) {
+        document.getElementById('transaksi_id').value = id;
+    }
+
+    const stars = document.querySelectorAll('.star');
+
+    stars.forEach(star => {
+        star.addEventListener('click', function () {
+            let rating = this.dataset.value;
+            document.getElementById('rating').value = rating;
+
+            stars.forEach(s => s.classList.remove('active'));
+            for (let i = 0; i < rating; i++) {
+                stars[i].classList.add('active');
+            }
+        });
+    });
+</script>
 
 
 <script>

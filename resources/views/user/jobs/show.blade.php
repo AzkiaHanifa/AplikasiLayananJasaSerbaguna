@@ -81,11 +81,44 @@
                                             <button
                                                 class="btn btn-sm btn-info"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#buktiModal"
+                                                data-bs-target="#buktiModal{{$invoice->id}}"
                                                 onclick="showBukti('{{ asset('storage/'.$invoice->bukti_pembayaran) }}')">
                                                 Lihat Bukti
                                             </button>
                                         @endif
+
+
+                                        <!-- Modal Preview Bukti Pembayaran -->
+                                        <div class="modal fade" id="buktiModal{{$invoice->id}}" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Preview Bukti Pembayaran</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+
+                                                    <div class="modal-body text-center">
+                                                        <img id="buktiImage"
+                                                            src=""
+                                                            class="img-fluid rounded"
+                                                            alt="Bukti Pembayaran">
+                                                            <br><br>
+                                                            @if($invoice->status == 'dibayar')
+                                                                <form action="/user/list-order/invoice/{{ $transaksi->id }}/bayar"
+                                                                    method="POST"
+                                                                    class="d-inline">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id_invoice" value="{{$invoice->id}}">
+                                                                    <button class="btn btn-success"
+                                                                            onclick="return confirm('Konfirmasi pembayaran invoice ini?')">
+                                                                        Konfirmasi Pembayaran
+                                                                    </button>
+                                                                </form>
+                                                            @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         {{-- @if($invoice->status == 'menunggu_pembayaran')
                                             <form action="{{ url('/invoice/'.$invoice->id.'/bayar') }}"
@@ -153,40 +186,55 @@
     </div>
 </div>
 @endif
+<style>
+    .star-empty {
+        color: #d1d5db;
+    }
 
-</div>
+</style>
+@if ($transaksi->status == 'selesai')
+        {{-- AKSI UTAMA --}}
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="mb-3">Ulasan Anda</h5>
 
-<!-- Modal Preview Bukti Pembayaran -->
-<div class="modal fade" id="buktiModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Preview Bukti Pembayaran</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+                    @if($transaksi->ulasan)
+                        {{-- Rating --}}
+                        @php $rating = $transaksi->ulasan->rating ?? 0; @endphp
 
-            <div class="modal-body text-center">
-                <img id="buktiImage"
-                     src=""
-                     class="img-fluid rounded"
-                     alt="Bukti Pembayaran">
-                     <br><br>
-                     @if($invoice->status == 'dibayar')
-                        <form action="/user/list-order/invoice/{{ $transaksi->id }}/bayar"
-                            method="POST"
-                            class="d-inline">
-                            @csrf
-                            <input type="hidden" name="id_invoice" value="{{$invoice->id}}">
-                            <button class="btn btn-success"
-                                    onclick="return confirm('Konfirmasi pembayaran invoice ini?')">
-                                Konfirmasi Pembayaran
-                            </button>
-                        </form>
+                        <div class="mb-2">
+                            @for($i = 1; $i <= 5; $i++)
+                                <i class="{{ $i <= $rating ? 'fa fa-star text-warning' : 'fa fa-star star-empty' }}"></i>
+                            @endfor
+                        </div>
+
+
+
+                        {{-- Text --}}
+                        @if($transaksi->ulasan->ulasan)
+                            <p class="mb-1">
+                                "{{ $transaksi->ulasan->ulasan }}"
+                            </p>
+                        @else
+                            <p class="text-muted fst-italic">
+                                Tidak ada komentar.
+                            </p>
+                        @endif
+
+                        <small class="text-muted">
+                            Diberikan pada {{ $transaksi->ulasan->created_at->format('d M Y') }}
+                        </small>
+                    @else
+                        <p class="text-muted mb-3">
+                            Pelanggan belum memberikan ulasan untuk transaksi ini.
+                        </p>
                     @endif
-            </div>
+            </div> 
         </div>
-    </div>
+    @endif
+
 </div>
+
 <script>
     function showBukti(src) {
         document.getElementById('buktiImage').src = src;

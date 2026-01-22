@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage; // Wajib untuk manajemen file
 use Illuminate\Support\Str; // Wajib untuk membuat slug
@@ -132,6 +133,17 @@ class CategoryController extends Controller
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil diupdate');
     }
 
+    public function show($slug)
+    {
+        $category = Category::where('slug', $slug)->firstOrFail();
+
+        $jobs = Job::where('category_id', $category->id)
+                    ->latest()
+                    ->get();
+
+        return view('landing.kategori', compact('category', 'jobs'));
+    }
+
     /**
      * Menghapus kategori
      */
@@ -155,14 +167,14 @@ class CategoryController extends Controller
     {
         // Jika status saat ini FALSE, berarti user mau mengubahnya jadi TRUE (Featured).
         // Maka kita harus cek dulu kuota 5.
-        if (!$category->is_featured) {
-            $countFeatured = Category::where('is_featured', true)->count();
+        // if (!$category->is_featured) {
+        //     $countFeatured = Category::where('is_featured', true)->count();
             
-            if ($countFeatured >= 5) {
-                // Return dengan session error agar ditangkap oleh alert merah di view index
-                return back()->with('error', 'Gagal! Maksimal hanya 5 kategori yang boleh di-highlight.');
-            }
-        }
+        //     if ($countFeatured >= 5) {
+        //         // Return dengan session error agar ditangkap oleh alert merah di view index
+        //         return back()->with('error', 'Gagal! Maksimal hanya 5 kategori yang boleh di-highlight.');
+        //     }
+        // }
 
         // Ubah status (Flip boolean: true jadi false, false jadi true)
         $category->update([

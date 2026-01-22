@@ -10,6 +10,7 @@ use App\Models\Mitra; // <--- PENTING: Wajib ada agar tidak error "Class 'App\Mo
 use App\Models\TransaksiJasa;
 use App\Models\Job;
 use Illuminate\Support\Str;
+use App\Models\UlasanJasa;
 use Carbon\Carbon;
 
 class UserController extends Controller
@@ -127,5 +128,23 @@ class UserController extends Controller
         return back()->with('success', 'Pesanan berhasil dibatalkan');
     }
 
-    
+    public function store(Request $request)
+    {
+        $request->validate([
+            'transaksi_id' => 'required|exists:transaksi_jasa,id',
+            'rating' => 'required|integer|min:1|max:5',
+            'ulasan' => 'nullable|string|max:1000',
+        ]);
+
+        // Cegah double review
+        UlasanJasa::updateOrCreate(
+            ['transaksi_jasa_id' => $request->transaksi_id],
+            [
+                'rating' => $request->rating,
+                'ulasan' => $request->ulasan,
+            ]
+        );
+
+        return back()->with('success', 'Terima kasih atas penilaian Anda 🙏');
+    }
 }

@@ -33,6 +33,42 @@
             object-fit: cover;
             padding: 0;
         }
+        .menu-scroll {
+        display: flex;
+        gap: 40px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        scrollbar-width: none; /* Firefox */
+        }
+
+        .menu-scroll::-webkit-scrollbar {
+        display: none; /* Chrome */
+        }
+
+        .menu-item {
+        flex: 0 0 auto;
+        text-align: center;
+        width: 90px;
+        }
+
+        .icon-circle {
+        width: 90px;
+        height: 90px;
+        background-color: #2f93d1;
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        margin: 0 auto 8px;
+        }
+
+        .menu-item span {
+        font-size: 14px;
+        font-weight: 500;
+        color: black;
+        }
     </style>
 
     {{-- MODAL SEARCH --}}
@@ -61,11 +97,11 @@
                     <div class="carousel-inner" role="listbox">
                         @forelse($banners as $key => $banner)
                             <div class="carousel-item {{ $key == 0 ? 'active' : '' }} rounded">
-                                <img src="{{ asset('storage/' . $banner->image) }}" class="w-100 bg-secondary rounded" alt="{{ $banner->title ?? 'Banner Image' }}" style="height: 400px; object-fit: cover;">
+                                <img src="{{ asset('storage/' . $banner->image) }}" class="w-100 bg-secondary rounded" alt="{{ $banner->title ?? 'Banner Image' }}" style="height: 100%;">
                                 @if($banner->title)
-                                <div class="carousel-caption d-none d-md-block">
+                                {{-- <div class="carousel-caption d-none d-md-block">
                                     <h3 class="text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">{{ $banner->title }}</h3>
-                                </div>
+                                </div> --}}
                                 @endif
                             </div>
                         @empty
@@ -78,6 +114,32 @@
                     <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span></button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="menu-scroll">
+            <a href="/kategori">
+                <div class="menu-item">
+                    <div class="icon-circle"><i class="fas fa-th-large text-white fs-3"></i></div>
+                    <span>Semua</span>
+                </div>
+            </a>
+            @php
+                use App\Models\Category;
+                $kategori = Category::all()->where('is_featured', 1);
+            @endphp
+            @foreach ($kategori as $item)
+                <a href="{{ route('kategori.show', $item->slug) }}">
+                    <div class="menu-item">
+                        <div class="icon-circle">
+                            <img src="{{ asset('storage/' . $item->icon) }}" alt="{{ $item->name }}">
+                        </div>
+                        <span>{{ $item->name }}</span>
+                    </div>
+                </a>
+            @endforeach
+
         </div>
     </div>
 
@@ -113,174 +175,111 @@
         </div>
     </div>
 
-    {{-- MAIN CONTENT (KATEGORI & LIST JASA) --}}
-    <div class="container-fluid fruite py-5">
+    <div class="container-fluid fruite">
         <div class="container py-5">
-            <div class="tab-class text-center">
-                
-                {{-- JUDUL DAN FILTER KATEGORI --}}
-                <div class="row g-4 mb-5">
-                    <div class="col-12 text-center mb-4">
-                        <h1>Jasa Untuk Kamu</h1>
-                    </div>
+            <div class="tab-class">
+
+                {{-- JUDUL --}}
+                <div class="row mb-4">
                     <div class="col-12">
-                        
-                        {{-- NAVIGASI TAB KATEGORI (ICON BULAT) --}}
-                        <ul class="nav nav-pills justify-content-center d-flex flex-wrap gap-4">
-                            
-                            {{-- 1. TOMBOL SEMUA --}}
-                            <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="pill" href="#tab-all" style="cursor: pointer;">
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="cat-circle">
-                                            <i class="fas fa-th-large text-primary fs-3"></i>
-                                        </div>
-                                        <span class="text-dark fw-bold" style="font-size: 14px;">Semua</span>
-                                    </div>
-                                </a>
-                            </li>
+                        <h3>Jasa Untuk Kamu</h3>
+                    </div>
+                </div>
 
-                            {{-- LOGIKA PHP: Pisahkan Kategori Featured & Lainnya --}}
-                            @php
-                                $featuredCategories = $categories->where('is_featured', 1)->take(5);
-                                $otherCategories = $categories->whereNotIn('id', $featuredCategories->pluck('id'));
-                            @endphp
+                {{-- GRID CARD --}}
+                <div class="row g-4">
+                    @foreach($jobs as $job)
+                        @php
+                            $rating = round($job->avg_rating ?? 0, 1);
+                            $fullStar = floor($rating);
+                            $halfStar = ($rating - $fullStar) >= 0.5;
+                            $emptyStar = 5 - $fullStar - ($halfStar ? 1 : 0);
+                        @endphp
 
-                            {{-- 2. LOOP KATEGORI UNGGULAN (Maksimal 5) --}}
-                            @foreach($featuredCategories as $category)
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="pill" href="#tab-{{ $category->id }}" style="cursor: pointer;">
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="cat-circle">
-                                            @if($category->icon)
-                                                <img src="{{ asset('storage/' . $category->icon) }}" alt="{{ $category->name }}">
-                                            @else
-                                                <i class="fas fa-list text-primary fs-3"></i>
-                                            @endif
-                                        </div>
-                                        <span class="text-dark fw-bold" style="font-size: 14px;">{{ $category->name }}</span>
-                                    </div>
-                                </a>
-                            </li>
-                            @endforeach
+                        <!--
+                        col-6   → mobile = 2 kolom
+                        col-md-4 → tablet = 3 kolom
+                        col-lg-3 → desktop = 4 kolom
+                        -->
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <div style="border-radius: 15px;"
+                                class="position-relative fruite-item border h-100 d-flex flex-column">
 
-                            {{-- 3. TOMBOL "LAINNYA" (DROPDOWN) --}}
-                            @if($otherCategories->count() > 0)
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" style="cursor: pointer;">
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="cat-circle">
-                                            <i class="fas fa-ellipsis-h text-primary fs-3"></i>
-                                        </div>
-                                        <span class="text-dark fw-bold" style="font-size: 14px;">Lainnya</span>
+                                <div class="fruite-img" style="height: 200px; overflow: hidden;">
+                                    <a href="{{ route('job.show', $job->id) }}">
+                                        @if($job->job_image)
+                                            <img src="{{ asset('storage/' . $job->job_image) }}"
+                                                class="img-fluid w-100 rounded-top"
+                                                alt="{{ $job->title }}"
+                                                style="height: 100%; object-fit: cover;">
+                                        @else
+                                            <img src="{{ asset('assets/user/img/fruite-item-5.jpg') }}"
+                                                class="img-fluid w-100 rounded-top"
+                                                alt="default"
+                                                style="height: 100%; object-fit: cover;">
+                                        @endif
+                                    </a>
+                                </div>
+
+                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                                    style="top: 10px; left: 10px;">
+                                    {{ $job->category->name }}
+                                </div>
+
+                                <div class="p-4 border-top-0 rounded-bottom d-flex flex-column flex-grow-1 text-start">
+                                    <h5>{{ Str::limit($job->title, 35) }}</h5>
+                                    <p class="small">{{ Str::limit($job->description, 50) }}</p>
+
+                                    {{-- Rating --}}
+                                    <div class="mb-3 d-flex align-items-center gap-1">
+                                        @for($i = 1; $i <= $fullStar; $i++)
+                                            <i class="fas fa-star text-warning"></i>
+                                        @endfor
+
+                                        @if($halfStar)
+                                            <i class="fas fa-star-half-alt text-warning"></i>
+                                        @endif
+
+                                        @for($i = 1; $i <= $emptyStar; $i++)
+                                            <i class="far fa-star text-warning"></i>
+                                        @endfor
+
+                                        <small class="text-muted ms-1">
+                                            {{ number_format($rating, 1) }}
+                                        </small>
                                     </div>
-                                </a>
-                                {{-- Isi Dropdown --}}
-                                <ul class="dropdown-menu">
-                                    @foreach($otherCategories as $category)
-                                    <li>
-                                        <a class="dropdown-item" data-bs-toggle="pill" href="#tab-{{ $category->id }}">
-                                            {{ $category->name }}
+
+                                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                                        <p class="text-dark fw-bold mb-0 small">
+                                            <i class="bi bi-geo-alt-fill"></i>
+                                            {{ Str::limit($job->location, 13) }}
+                                        </p>
+
+                                        <a href="{{ route('job.show', $job->id) }}"
+                                        class="btn btn-sm border border-primary rounded-pill px-3 text-primary">
+                                            Order
                                         </a>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </li>
-                            @endif
-
-                        </ul>
-                    </div>
-                </div>
-
-                {{-- CONTENT TAB --}}
-                <div class="tab-content">
-                    {{-- TAB SEMUA --}}
-                    <div id="tab-all" class="tab-pane fade show p-0 active">
-                        <div class="row g-4">
-                            @foreach($jobs as $job)
-                                <div class="col-md-6 col-lg-4 col-xl-3">
-                                    <div class="rounded position-relative fruite-item border border-secondary h-100 d-flex flex-column">
-                                        <div class="fruite-img" style="height: 200px; overflow: hidden;">
-                                            <a href="{{ route('job.show', $job->id) }}">
-                                                @if($job->job_image)
-                                                    <img src="{{ asset('storage/' . $job->job_image) }}" class="img-fluid w-100 rounded-top" alt="{{ $job->title }}" style="height: 100%; object-fit: cover;">
-                                                @else
-                                                    <img src="{{ asset('assets/user/img/fruite-item-5.jpg') }}" class="img-fluid w-100 rounded-top" alt="default" style="height: 100%; object-fit: cover;">
-                                                @endif
-                                            </a>
-                                        </div>
-                                        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
-                                            {{ $job->category->name }}
-                                        </div>
-                                        <div class="p-4 border-top-0 rounded-bottom d-flex flex-column flex-grow-1 text-start">
-                                            <h4>{{ $job->title }}</h4>
-                                            <p>{{ Str::limit($job->description, 50) }}</p>
-                                            <div class="mt-auto d-flex justify-content-between flex-lg-wrap align-items-center">
-                                                <p class="text-dark fs-5 fw-bold mb-0"><i class="bi bi-geo-alt-fill"></i> {{ $job->location }}</p>
-                                                <a href="{{ route('job.show', $job->id) }}" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                    <i class="fa fa-shopping-bag me-2 text-primary"></i> Order
-                                                </a>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    
-                    {{-- TAB PER CATEGORY --}}
-                    @foreach($categories as $category)
-                    <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            @php $filteredJobs = $jobs->where('category_id', $category->id); @endphp
 
-                            @if($filteredJobs->count() > 0)
-                                @foreach($filteredJobs as $job)
-                                <div class="col-md-6 col-lg-4 col-xl-3">
-                                    <div class="rounded position-relative fruite-item border border-secondary h-100 d-flex flex-column">
-                                        <div class="fruite-img" style="height: 200px; overflow: hidden;">
-                                            <a href="{{ route('job.show', $job->id) }}">
-                                                @if($job->job_image)
-                                                    <img src="{{ asset('storage/' . $job->job_image) }}" class="img-fluid w-100 rounded-top" alt="{{ $job->title }}" style="height: 100%; object-fit: cover;">
-                                                @else
-                                                    <img src="{{ asset('assets/user/img/fruite-item-5.jpg') }}" class="img-fluid w-100 rounded-top" alt="default" style="height: 100%; object-fit: cover;">
-                                                @endif
-                                            </a>
-                                        </div>
-                                        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
-                                            {{ $job->category->name }}
-                                        </div>
-                                        <div class="p-4 border-top-0 rounded-bottom d-flex flex-column flex-grow-1 text-start">
-                                            <h4>{{ $job->title }}</h4>
-                                            <p>{{ Str::limit($job->description, 50) }}</p>
-                                            <div class="mt-auto d-flex justify-content-between flex-lg-wrap align-items-center">
-                                                <p class="text-dark fs-5 fw-bold mb-0"><i class="bi bi-geo-alt-fill"></i> {{ $job->location }}</p>
-                                                <a href="{{ route('job.show', $job->id) }}" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                    <i class="fa fa-shopping-bag me-2 text-primary"></i> Order
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                            @else
-                                <div class="col-12 text-center py-5">
-                                    <p class="text-muted">Belum ada jasa di kategori ini.</p>
-                                </div>
-                            @endif
+                            </div>
                         </div>
-                    </div>
                     @endforeach
-
                 </div>
-            </div>      
+
+                <div class="mt-4">
+                    {{ $jobs->links() }}
+                </div>
+
+            </div>
         </div>
+
     </div>
 
     {{-- CAROUSEL JASA TERBARU --}}
-    <div class="container-fluid vesitable py-5">
+    {{-- <div class="container-fluid vesitable py-5">
         <div class="container py-5">
-            <h1 class="mb-0">Jasa Terbaru</h1>
+            <h3 class="mb-0">Jasa Untuk Kamu</h3>
             <div class="owl-carousel vegetable-carousel justify-content-center">
                 @foreach($jobs->take(6) as $job) 
                 <div class="border border-primary rounded position-relative vesitable-item">
@@ -310,23 +309,23 @@
                 @endforeach
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- BANNER MITRA --}}
     <div class="container-fluid banner bg-secondary my-5">
-        <div class="container py-5">
+        <div class="container">
             <div class="row g-4 align-items-center">
                 <div class="col-lg-6">
                     <div class="py-4">
-                        <h1 class="display-3 text-white">Bergabung Jadi Mitra</h1>
-                        <p class="fw-normal display-3 text-dark mb-4">Dapatkan Penghasilan</p>
-                        <p class="mb-4 text-dark">Tawarkan keahlian Anda kepada ribuan pengguna aktif kami setiap harinya.</p>
-                        <a href="{{ route('register') }}" class="banner-btn btn border-2 border-white rounded-pill text-dark py-3 px-5">DAFTAR SEKARANG</a>
+                        <h1 class="display-3 text-white">Bergabung Jadi Mitra/Jasa</h1>
+                        <p class="fw-normal display-3 text-white mb-4">Dapatkan Penghasilan</p>
+                        <p class="mb-4 text-white">Tawarkan keahlian Anda kepada ribuan pengguna aktif kami setiap harinya.</p>
+                        <a href="{{ route('register') }}" class="banner-btn btn border-2 border-white rounded-pill text-white py-3 px-5">DAFTAR SEKARANG</a>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="position-relative">
-                        <img src="{{ asset('assets/user/img/baner-1.png') }}" class="img-fluid w-100 rounded" alt="">
+                        <img src="{{ asset('images/kuli.png') }}" class="img-fluid w-100 rounded" alt="">
                     </div>
                 </div>
             </div>

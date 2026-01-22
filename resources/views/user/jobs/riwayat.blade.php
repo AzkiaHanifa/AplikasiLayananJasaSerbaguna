@@ -82,6 +82,11 @@
                             </div>
                         </div>
                     @endif
+                    @if ($item->status == 'selesai')
+                        <div class="">
+                            <a href="/user/list-order/invoice/{{$item->id}}" class="btn btn-lg btn-primary mt-2">Lihat Detail</a>
+                        </div>
+                    @endif
 
                     <div class="modal fade" id="hubungiJasa" tabindex="-1">
                         <div class="modal-dialog">

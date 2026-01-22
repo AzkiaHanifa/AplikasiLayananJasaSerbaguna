@@ -85,6 +85,87 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="card mb-4">
+                            <div class="p-4">
+                                <h5 class="mb-3">Rating & Ulasan Jasa</h5>
+
+                                <div class="d-flex align-items-center gap-4">
+                                    {{-- Angka Rating --}}
+                                    <div class="display-4 fw-bold" style="color: black;">
+                                        {{ number_format($avgRating, 1) }}
+                                    </div>
+
+                                    {{-- Bintang --}}
+                                    @php
+                                        $full = floor($avgRating);
+                                        $half = ($avgRating - $full) >= 0.5;
+                                        $empty = 5 - $full - ($half ? 1 : 0);
+                                    @endphp
+
+                                    <div>
+                                        @for($i=1;$i<=$full;$i++)
+                                            <i class="fas fa-star text-warning fs-4"></i>
+                                        @endfor
+
+                                        @if($half)
+                                            <i class="fas fa-star-half-alt text-warning fs-4"></i>
+                                        @endif
+
+                                        @for($i=1;$i<=$empty;$i++)
+                                            <i class="far fa-star text-warning fs-4"></i>
+                                        @endfor
+
+                                        <div class="text-muted mt-2">
+                                            Berdasarkan <strong>{{ $totalUlasan }}</strong> ulasan
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="">
+                            <div class="">
+                                @forelse($ulasan as $u)
+                                    <div class="border-bottom pb-3 mb-3">
+                                        <div class="d-flex align-items-center gap-3 mb-2">
+                                            {{-- Avatar --}}
+                                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
+                                                style="width:35px;height:35px;">
+                                                <strong class="text-white">{{ strtoupper(substr($u->transaksi->user->nama,0,1)) }}</strong>
+                                            </div>
+
+                                            <strong style="color: black;">{{ $u->transaksi->user->nama }}</strong>
+                                        </div>
+
+                                        {{-- Bintang --}}
+                                        <div class="mb-2">
+                                            @for($i=1;$i<=5;$i++)
+                                                @if($i <= $u->rating)
+                                                    <i class="fas fa-star text-warning"></i>
+                                                @else
+                                                    <i class="far fa-star text-warning"></i>
+                                                @endif
+                                            @endfor
+                                        </div>
+
+                                        {{-- Ulasan --}}
+                                        <p class="mb-1">
+                                            {{ $u->ulasan }}
+                                        </p>
+
+                                        {{-- Tanggal --}}
+                                        <small class="text-muted">
+                                            {{ $u->created_at->format('d/m/Y') }}
+                                        </small>
+                                    </div>
+                                @empty
+                                    <p class="text-muted mb-0">Belum ada ulasan untuk jasa ini.</p>
+                                @endforelse
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>

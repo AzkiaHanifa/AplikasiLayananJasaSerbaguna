@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.user.main')
 
 @section('content')
+<br><br><br><br><br><br>
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -44,7 +45,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            <a href="{{ route('user.home') }}" class="btn btn-secondary">Batal</a>
+                            <a href="/user/profile" class="btn btn-secondary">Batal</a>
                             <button type="submit" class="btn btn-success">Simpan Perubahan</button>
                         </div>
                     </form>

@@ -203,7 +203,11 @@ class UserJobController extends Controller
     public function toggleStatus($id, Request $request)
     {
         $job = Job::findOrFail($id);
-        $job->is_job = $request->status;
+
+        $job->is_job = $job->is_job === 'tersedia'
+            ? 'tidak tersedia'
+            : 'tersedia';
+
         $job->save();
 
         return redirect('/user/profile')->with(
@@ -211,6 +215,7 @@ class UserJobController extends Controller
             'Status jasa berhasil diubah'
         );
     }
+
 
     public function tolakTransaksi($id)
     {
